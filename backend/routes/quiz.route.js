@@ -45,7 +45,7 @@ quizRoute.patch("/:quizID",auth,async(req,res)=>{
         if (!quiz) {
             return res.status(404).json({ msg: "Quiz not found" });
         }
-        const updatedQuiz = await QuizModel.findByIdAndUpdate(quizID, payload, { new: true });
+        const updatedQuiz = await QuizModel.findByIdAndUpdate(quizID, payload);
         res.json(updatedQuiz);
     }
     catch (err){
