@@ -8,4 +8,8 @@ const performanceSchema = new mongoose.Schema({
   timeTaken: { type: Number, required: true } 
 }, { timestamps: true });
 
-const Performance = mongoose.model('Performance', performanceSchema);
+const PerformanceModel = mongoose.model('Performance', performanceSchema);
+
+module.exports={
+    PerformanceModel
+}

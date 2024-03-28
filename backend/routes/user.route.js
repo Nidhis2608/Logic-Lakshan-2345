@@ -8,13 +8,13 @@ const { model } = require("mongoose");
 const userRouter=express.Router()
 
 userRouter.post("/register",(req,res)=>{
-    const {username,email,password}=req.body;
+    const {username,email,password,role}=req.body;
     try{
         bcrypt.hash(password, 5, async(err, hash) =>{
              if(err){
                 res.send(err)
              } else {
-                const user=new UserModel({username,email,password:hash})
+                const user=new UserModel({username,email,password:hash,role})
                 await user.save()
                  //res.send({msg:"Registered"})
                  res.status(200).json({ message: "User registered successfully" });
@@ -34,7 +34,7 @@ userRouter.post("/login", async(req,res)=>{
     if(user){
         bcrypt.compare(password, user.password, (err, result) =>{
            if(result){
-            const token= jwt.sign({userID:user._id,username:user.username},"masai")
+            const token= jwt.sign({userID:user._id,username:user.username,role:user.role},"masai")
             res.json({msg:"Login successfull",token})
            } else {
             res.json("Wrong credentials")

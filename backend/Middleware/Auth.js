@@ -10,8 +10,9 @@ const auth= async(req,res,next)=>{
             } else {
                 req.body.userID=decoded.userID
                 req.body.username=decoded.username
-                console.log(decoded)
-                console.log(req.body)
+                req.role=decoded.role
+                console.log("decoded",decoded)
+                console.log("Req-Body",req.body)
                 next()
             }
         })

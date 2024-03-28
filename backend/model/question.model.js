@@ -6,4 +6,8 @@ const questionSchema = new mongoose.Schema({
   options: [{ text: String, isCorrect: Boolean }]
 }, { timestamps: true });
 
-const Question = mongoose.model('Question', questionSchema);
+const QuestionModel  = mongoose.model('Question', questionSchema);
+
+module.exports={
+    QuestionModel
+}
