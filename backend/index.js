@@ -1,9 +1,10 @@
 const express = require("express")
 const { connection } = require("./config/db")
+const { userRouter } = require("./routes/user.route")
 
 const app = express()
 app.use(express.json())
-
+app.use("/users",userRouter)
 
 app.listen(process.env.port, async() => {
 	try {

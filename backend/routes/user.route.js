@@ -2,6 +2,7 @@ const express=require("express");
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const { UserModel } = require("../model/user.model");
+const { model } = require("mongoose");
 
 
 const userRouter=express.Router()
@@ -33,7 +34,7 @@ userRouter.post("/login", async(req,res)=>{
     if(user){
         bcrypt.compare(password, user.password, (err, result) =>{
            if(result){
-            const token= jwt.sign({userID:user._id,username:user.username},"nidhi")
+            const token= jwt.sign({userID:user._id,username:user.username},"masai")
             res.json({msg:"Login successfull",token})
            } else {
             res.json("Wrong credentials")
@@ -46,3 +47,7 @@ userRouter.post("/login", async(req,res)=>{
     res.json({err})
  }
 })
+
+module.exports={
+    userRouter
+}
