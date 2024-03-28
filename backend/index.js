@@ -2,11 +2,13 @@ const express = require("express")
 const { connection } = require("./config/db")
 const { userRouter } = require("./routes/user.route")
 const { performanceRoute } = require("./routes/performance.route")
+const adminRoute = require("./routes/admin.router")
 
 const app = express()
 app.use(express.json())
 app.use("/users",userRouter)
 app.use("/performance",performanceRoute)
+app.use("/admin",adminRoute)
 
 app.listen(process.env.port, async() => {
 	try {
