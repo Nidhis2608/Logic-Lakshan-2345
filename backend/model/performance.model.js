@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
 const performanceSchema = new mongoose.Schema({
-  username:String,
-  userID:String,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz', required: true },
   contest: { type: mongoose.Schema.Types.ObjectId, ref: 'Contest', required: true },
   score: { type: Number, required: true },

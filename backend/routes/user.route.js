@@ -2,6 +2,7 @@ const express=require("express");
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const { UserModel } = require("../model/user.model");
+const { model } = require("mongoose");
 
 
 const userRouter=express.Router()
@@ -11,7 +12,7 @@ userRouter.post("/register",(req,res)=>{
     try{
         bcrypt.hash(password, 5, async(err, hash) =>{
              if(err){
-                res.send(err.message)
+                res.send(err)
              } else {
                 const user=new UserModel({username,email,password:hash,role})
                 await user.save()
@@ -21,7 +22,7 @@ userRouter.post("/register",(req,res)=>{
         });
     }
     catch(err){
-        res.status(400).json({msg:err.message});
+        res.send({err})
     }
 })
 
@@ -43,7 +44,7 @@ userRouter.post("/login", async(req,res)=>{
         res.json("Please Register first...")
     }
   } catch(err){
-    res.status(400).json({msg:err.message});
+    res.json({err})
  }
 })
 
