@@ -1,14 +1,16 @@
-const express= require("express")
+const express = require("express")
+const { connection } = require("./config/db")
 
-const { connection } = require("./config/db.js")
-
-
-const app=express()
+const app = express()
 app.use(express.json())
 
 
-app.listen(3000,async()=>{
-    await connection
-    console.log("Connected to the DB")
-    console.log("Server is running at the port 3000")
+app.listen(process.env.port, async() => {
+	try {
+		await connection
+		console.log("Connected to the DB")
+		console.log(`Server is running at port ${process.env.port}`)
+	} catch (err) {
+		console.log(err)
+	}
 })
