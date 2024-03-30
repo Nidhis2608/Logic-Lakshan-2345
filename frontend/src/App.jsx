@@ -1,14 +1,14 @@
-import Allroutes from "./Routes/AllRoutes"
-
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Login from "./components/login";
 
 function App() {
-
-
   return (
     <>
-       <Allroutes />
+        <Navbar />
+        <Login />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
