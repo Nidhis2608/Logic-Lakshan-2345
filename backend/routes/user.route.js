@@ -3,6 +3,7 @@ const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const { UserModel } = require("../model/user.model");
 const { model } = require("mongoose");
+const { auth } = require("../Middleware/Auth");
 
 
 const userRouter=express.Router()
@@ -47,6 +48,13 @@ userRouter.post("/login", async(req,res)=>{
     res.json({err})
  }
 })
+
+// const blacklist=[]
+// userRouter.post("/logout",auth,(req,res)=>{
+// 	const token=req.headers.authorization
+// 	blacklist.push(token)
+// 	res.status(200).json({msg:"User Logged Out Successfully"})
+// })
 
 module.exports={
     userRouter

@@ -163,6 +163,6 @@ adminRoute.delete('/quizzes/:id', async (req, res) => {
 });
 
 
-module.exports =adminRoute
+module.exports = adminRoute
 
 

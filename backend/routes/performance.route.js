@@ -1,12 +1,28 @@
+const { access } = require("../Middleware/Access.middleware");
+const { auth } = require("../Middleware/Auth");
 const {PerformanceModel}=require("../model/performance.model")
 const express=require("express")
 
 const performanceRoute=express.Router()
 
-performanceRoute.get("/", async(req,res)=>{
+performanceRoute.get("/",auth,access("admin","user"), async(req,res)=>{
     try{
       const performance=await PerformanceModel.find();
       res.json(performance)
+    }
+    catch(err){
+        res.status(500).json({msg:err.message})
+    }
+})
+
+performanceRoute.get("/:id",auth,access("admin","user"), async(req,res)=>{
+    try{
+        const performance=await PerformanceModel.findById(req.params.id)
+        if(performance){
+            res.json(performance)
+        } else {
+           res.status(404).json({msg:'Performance not found'})
+        }
     }
     catch(err){
         res.status(500).json({msg:err.message})

@@ -1,6 +1,6 @@
 const access=(...rolesPermitted)=>{
     return (req,res,next)=>{
-        console.log(req);
+        console.log("AccessRequest",req);
       if(rolesPermitted.includes(req.role)){
         next()
       } else {
