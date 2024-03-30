@@ -3,6 +3,7 @@ const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const { UserModel } = require("../model/user.model");
 const { model } = require("mongoose");
+const { auth } = require("../Middleware/Auth");
 
 
 const userRouter=express.Router()
@@ -47,6 +48,8 @@ userRouter.post("/login", async(req,res)=>{
     res.json({err})
  }
 })
+
+
 
 module.exports={
     userRouter
