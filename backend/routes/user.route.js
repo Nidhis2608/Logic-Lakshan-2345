@@ -49,12 +49,7 @@ userRouter.post("/login", async(req,res)=>{
  }
 })
 
-// const blacklist=[]
-// userRouter.post("/logout",auth,(req,res)=>{
-// 	const token=req.headers.authorization
-// 	blacklist.push(token)
-// 	res.status(200).json({msg:"User Logged Out Successfully"})
-// })
+
 
 module.exports={
     userRouter
