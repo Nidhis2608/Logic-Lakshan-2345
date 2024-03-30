@@ -1,7 +1,7 @@
 // import React from "react";
-import "../styles/login.css";
-import loginImage from "../assets/images/login.webp";
-import signupImage from "../assets/images/login.webp";
+import "../Styles/login.css";
+import loginImage from "../assets/Images/login.webp";
+import signupImage from "../assets/Images/login.webp";
 import { useEffect, useRef } from "react";
 import axios from "axios";
 
