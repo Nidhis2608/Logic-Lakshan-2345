@@ -2,7 +2,7 @@ import '../Styles/HomeStyle.css'
 import facebook from "../assets/Images/facebook.svg"
 import instagram from "../assets/Images/instagram.svg"
 import twitter from "../assets/Images/twitter.svg"
-
+//footer page
 function FooterPage() {
   return (
     <footer className="footer">

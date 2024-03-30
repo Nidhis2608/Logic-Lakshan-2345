@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import HomePage from '../Pages/HomePage';
 import About from '../Pages/About';
 import ContactPage from '../Pages/ContactPage';
-
+//this is all route nbjbbbj
 const Allroutes = () => {
 
 
