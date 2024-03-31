@@ -62,7 +62,7 @@ const Login = () => {
 
       axios
         .post(
-          "http://localhost:3000/users/login",
+          "https://cyan-clumsy-haddock.cyclic.app/users/login",
           formData
         )
         .then((response) => {
@@ -115,7 +115,7 @@ const Login = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:3000/users/register",
+          "https://cyan-clumsy-haddock.cyclic.app/users/register",
           requestData
         );
         if (response.status === 200) {
