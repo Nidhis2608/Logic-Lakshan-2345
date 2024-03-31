@@ -46,6 +46,20 @@ adminRoute.get('/questions', async (req, res) => {
   }
 });
 
+adminRoute.get('/questions/:id', async (req, res) => {
+  try {
+    const { id } = req.params; // Extract id from URL params
+    const question = await QuestionModel.findById(id); // Find question by ID
+    
+    if (!question) {
+      return res.status(404).json({ message: 'Question not found' });
+    }
+
+    res.status(200).json(question);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 
 // POST request to add questions to a quiz
