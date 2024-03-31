@@ -72,7 +72,7 @@ const Login = () => {
             localStorage.setItem("token", data.token);
             showMessage(messageWrapper, "Login Successful", "green");
             setTimeout(() => {
-              window.location.href = "/dashboard";
+              window.location.href = "/";
             }, 1000);
           } else {
             showMessage(
