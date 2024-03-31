@@ -111,19 +111,47 @@ adminRoute.post('/quizzes', async (req, res) => {
 Get all Question demo with filter
 http://localhost:3000/admin/quizzes?category=Java
 */
+
+
+
 adminRoute.get('/quizzes', async (req, res) => {
   try {
     const filter = {};
+    const paginationOptions = {
+      page: req.query.page || 1,
+      limit: req.query.limit || 10
+    };
+    
     if (req.query.category) {
       filter.category = req.query.category;
     }
+    
+    if (req.query.title) {
+      filter.title = { $regex: new RegExp(req.query.title, 'i') }; // case-insensitive search
+    }
 
-    const quizzes = await QuizModel.find(filter);
-    res.status(200).json(quizzes);
+    const quizzesPromise = QuizModel.find(filter)
+      .skip((paginationOptions.page - 1) * paginationOptions.limit)
+      .limit(paginationOptions.limit)
+      .exec();
+
+    const totalItemsPromise = QuizModel.countDocuments(filter).exec();
+
+    const [quizzes, totalItems] = await Promise.all([quizzesPromise, totalItemsPromise]);
+
+    // Fetching all categories
+    const categories = await QuizModel.distinct('category').exec();
+
+    res.status(200).json({
+      quizzes,
+      totalItems,
+      categories
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 
 adminRoute.patch('/quizzes/:id', async (req, res) => {

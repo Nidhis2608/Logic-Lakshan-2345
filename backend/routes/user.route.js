@@ -68,7 +68,22 @@ userRouter.post("/login", async (req, res) => {
 // Endpoint to get all users
 userRouter.get("/", async (req, res) => {
   try {
-    const users = await UserModel.find();
+    const { username, email, role } = req.query;
+    let query = {};
+
+    if (username) {
+      query.username = { $regex: new RegExp(username, "i") };
+    }
+
+    if (email) {
+      query.email = { $regex: new RegExp(email, "i") };
+    }
+
+    if (role) {
+      query.role = role;
+    }
+
+    const users = await UserModel.find(query);
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
