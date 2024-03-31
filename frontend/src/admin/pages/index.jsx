@@ -1,85 +1,281 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import {
-  Avatar,
   Box,
+  Button,
+  Card,
   Container,
-  Grid,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  IconButton,
   Stack,
-  SvgIcon,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Typography,
+  TablePagination,
+  TextField,
 } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import OverviewLatestCustomers from "../../admin/sections/overview/overview-latest-customers";
-import { OverviewSummary } from "../../admin/sections/overview/overview-summary";
+import { Scrollbar } from "../../admin/components/scrollbar";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { requrl } from "../../admin/const/const";
 
-const Page = () => {
-  // const [userCount, setUserCount] = useState(0);
+const UsersPage = () => {
+  const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchUsername, setSearchUsername] = useState("");
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [editedUser, setEditedUser] = useState({});
+  const [newUsername, setNewUsername] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [openAddUserDialog, setOpenAddUserDialog] = useState(false);
+  const [newUser, setNewUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    role: "user",
+  });
 
-  // useEffect(() => {
-  //   const fetchUserCount = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         "https://gray-wandering-nematode.cyclic.app/users"
-  //       );
-  //       const data = await response.json();
-  //       setUserCount(data.length); // Count the number of users in the response array
-  //     } catch (error) {
-  //       console.error("Error fetching user count: ", error);
-  //     }
-  //   };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
-  //   fetchUserCount();
-  // }, []);
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(
+        `${requrl}/users?username=${searchUsername}`
+      );
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error("Error fetching users: ", error);
+    }
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleEdit = (user) => {
+    setEditedUser(user);
+    setNewUsername(user.username);
+    setNewEmail(user.email);
+    setOpenEditDialog(true);
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      const updatedUser = {
+        ...editedUser,
+        username: newUsername,
+        email: newEmail,
+      };
+      await fetch(`${requrl}/users/${editedUser._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedUser),
+      });
+      setOpenEditDialog(false);
+      fetchUsers();
+    } catch (error) {
+      console.error("Error updating user: ", error);
+    }
+  };
+
+  const handleDelete = async (userId) => {
+    try {
+      await fetch(`${requrl}/users/${userId}`, {
+        method: "DELETE",
+      });
+      fetchUsers();
+    } catch (error) {
+      console.error("Error deleting user: ", error);
+    }
+  };
+
+  const handleCloseEditDialog = () => {
+    setOpenEditDialog(false);
+  };
+
+  const handleOpenAddUserDialog = () => {
+    setOpenAddUserDialog(true);
+  };
+
+  const handleCloseAddUserDialog = () => {
+    setOpenAddUserDialog(false);
+  };
+
+  const handleAddUser = async () => {
+    try {
+      const response = await fetch(`${requrl}/users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
+      if (response.ok) {
+        setOpenAddUserDialog(false);
+        setNewUser({
+          username: "",
+          email: "",
+          password: "",
+          role: "user",
+        });
+        fetchUsers(); // Refresh the user list
+      } else {
+        console.error("Error adding user:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error adding user:", error);
+    }
+  };
+
+  const handleSearchUsernameChange = (event) => {
+    setSearchUsername(event.target.value);
+  };
 
   return (
     <>
       <Helmet>
-        <title>DashBoard</title>
+        <title>Users | Your App Name</title>
       </Helmet>
-      <Box
-        sx={{
-          flexGrow: 1,
-          py: 8,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <Box sx={{ flexGrow: 1, py: 8 }}>
         <Container maxWidth="xl">
           <Stack spacing={3}>
-            <Grid container spacing={3}>
-              {/* <Grid item xs={12} md={4}>
-                <OverviewSummary
-                  icon={
-                    <Avatar
-                      sx={{
-                        backgroundColor: "primary.main",
-                        color: "primary.contrastText",
-                        height: 56,
-                        width: 56,
-                      }}
-                    >
-                      <SvgIcon>
-                        <PersonIcon />
-                      </SvgIcon>
-                    </Avatar>
-                  }
-                  label="Users"
-                  value="5610"
-                  users={userCount}
+            <Typography variant="h4">Users</Typography>
+            <Stack spacing={2} direction="row">
+              <TextField
+                label="Search by Username"
+                value={searchUsername}
+                onChange={handleSearchUsernameChange}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpenAddUserDialog}
+              >
+                Add User
+              </Button>
+            </Stack>
+            <div>
+              <Card>
+                <Scrollbar>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>s.n</TableCell>
+                        <TableCell>Username</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {users
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map((user, index) => (
+                          <TableRow key={user._id}>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>{user.username}</TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>
+                              <IconButton onClick={() => handleEdit(user)}>
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton
+                                onClick={() => handleDelete(user._id)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </Scrollbar>
+                <Divider />
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={users.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-              </Grid> */}
-
-              <Grid item xs={12}>
-                <OverviewLatestCustomers />
-              </Grid>
-            </Grid>
+              </Card>
+            </div>
           </Stack>
         </Container>
       </Box>
+      {/* Edit Dialog */}
+      <Dialog open={openEditDialog} onClose={handleCloseEditDialog}>
+        <DialogTitle>Edit User</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Edit the username and email of the user.
+          </DialogContentText>
+          <TextField
+            label="Username"
+            value={newUsername}
+            onChange={(e) => setNewUsername(e.target.value)}
+          />
+          <TextField
+            label="Email"
+            value={newEmail}
+            onChange={(e) => setNewEmail(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEditDialog}>Cancel</Button>
+          <Button onClick={handleSaveEdit}>Save</Button>
+        </DialogActions>
+      </Dialog>
+      {/* Add User Dialog */}
+      <Dialog open={openAddUserDialog} onClose={handleCloseAddUserDialog}>
+        <DialogTitle>Add User</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Enter the username and email of the new user.
+          </DialogContentText>
+          <TextField
+            label="Username"
+            value={newUser.username}
+            onChange={(e) =>
+              setNewUser({ ...newUser, username: e.target.value })
+            }
+          />
+          <TextField
+            label="Email"
+            value={newUser.email}
+            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAddUserDialog}>Cancel</Button>
+          <Button onClick={handleAddUser}>Add</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
 
-export default Page;
+export default UsersPage;
