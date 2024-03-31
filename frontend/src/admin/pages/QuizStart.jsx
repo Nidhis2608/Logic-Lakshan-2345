@@ -1,97 +1,41 @@
-import { Helmet } from "react-helmet-async";
-import {
-  Box,
-  Card,
-  Container,
-  Link,
-  Stack,
-  Typography,
-  Unstable_Grid2 as Grid,
-} from "@mui/material";
+import * as React from 'react';
+import Card from '@mui/material/Card';
+// import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+// import CardMedia from '@mui/material/CardMedia';
+// import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
-const QuizStart = () => (
-  <>
-    <Helmet>
-      <title>Theme | Carpatin Free</title>
-    </Helmet>
-    <Box
-      sx={{
-        flexGrow: 1,
-        py: 8,
-      }}
-    >
-      <Container maxWidth="xl">
-        <Stack spacing={3}>
-          <div>
-            <Typography variant="h4">Typography</Typography>
-          </div>
-          <div>
-            <Grid container spacing={3}>
-              <Grid xs={12} md={4}>
-                <Stack spacing={1}>
-                  <Typography variant="h6">Headings</Typography>
-                  <Typography color="text.secondary" variant="body2">
-                    We use{" "}
-                    <Link
-                      color="primary"
-                      href="https://fonts.google.com/specimen/Inter"
-                      target="_blank"
-                      variant="inherit"
-                    >
-                      Inter
-                    </Link>{" "}
-                    as our main font name for all our components.
-                    <br />
-                    <br />
-                    The sizes have been reconfigured to match the needs of a
-                    clean and SEO friendly dashboard.
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid xs={12} md={8}>
-                <Card>
-                  <Stack spacing={3} sx={{ p: 3 }}>
-                    {["h1", "h2", "h3", "h4", "h5", "h6"].map((variant) => (
-                      <Typography key={variant} variant={variant}>
-                        Heading
-                      </Typography>
-                    ))}
-                  </Stack>
-                </Card>
-              </Grid>
-              <Grid xs={12} md={4}>
-                <Typography variant="h6">Body</Typography>
-              </Grid>
-              <Grid xs={12} md={8}>
-                <Card>
-                  <Stack spacing={3} sx={{ p: 3 }}>
-                    {[
-                      "body1",
-                      "body2",
-                      "subtitle1",
-                      "subtitle2",
-                      "overline",
-                      "caption",
-                    ].map((variant) => (
-                      <Typography
-                        key={variant}
-                        sx={{
-                          textTransform: variant !== "overline" && "capitalize",
-                        }}
-                        variant={variant}
-                      >
-                        {variant}
-                      </Typography>
-                    ))}
-                  </Stack>
-                </Card>
-              </Grid>
-            </Grid>
-          </div>
-        </Stack>
-      </Container>
-    </Box>
-  </>
-);
+
+
+
+const QuizStart = () => {
+  return (
+    <Card sx={{ maxWidth: 345 }}>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          Question No
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Description
+        </Typography>
+      </CardContent>
+      <FormControl>
+  {/* <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel> */}
+  <RadioGroup
+    aria-labelledby="demo-radio-buttons-group-label"
+    defaultValue="female"
+    name="radio-buttons-group"
+  >
+    <FormControlLabel value="option1" control={<Radio />} label="option1" />
+    <FormControlLabel value="option2" control={<Radio />} label="option2" />
+    <FormControlLabel value="option3" control={<Radio />} label="option3" />
+    <FormControlLabel value="option4" control={<Radio />} label="option4" />
+  </RadioGroup>
+</FormControl>
+    </Card>
+  );
+  };
 
 export default QuizStart;
