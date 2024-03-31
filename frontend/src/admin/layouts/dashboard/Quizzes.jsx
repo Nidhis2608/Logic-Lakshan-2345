@@ -5,6 +5,7 @@ import { SideNav } from "./side-nav";
 import { TopNav } from "./top-nav";
 import Page from "../../pages/index";
 import OrderPage from "../../pages/orders";
+import QuizzesPage from "../../pages/orders";
 
 const SIDE_NAV_WIDTH = 73;
 const TOP_NAV_HEIGHT = 64;
@@ -36,7 +37,7 @@ export const Quizzes = () => {
         <LayoutContainer>
           {/* <Layout /> */}
 
-          <OrderPage />
+          <QuizzesPage />
           <Footer />
         </LayoutContainer>
       </LayoutRoot>

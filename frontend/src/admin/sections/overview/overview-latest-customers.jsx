@@ -35,6 +35,13 @@ const OverviewLatestCustomers = (props) => {
   const [deleteUserId, setDeleteUserId] = useState(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [editedUser, setEditedUser] = useState({});
+  const [query, setQuery] = useState("");
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [newUserData, setNewUserData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -110,17 +117,64 @@ const OverviewLatestCustomers = (props) => {
     }));
   };
 
+  const handleAddDialogOpen = () => {
+    setAddDialogOpen(true);
+  };
+
+  const handleAddDialogClose = () => {
+    setAddDialogOpen(false);
+    // Reset new user data when dialog closes
+    setNewUserData({
+      username: "",
+      email: "",
+      password: "",
+    });
+  };
+
+  const handleAddUser = async () => {
+    try {
+      await fetch("https://cyan-clumsy-haddock.cyclic.app/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUserData),
+      });
+      fetchUsers(); // Refresh the user list after adding a new user
+    } catch (error) {
+      console.error("Error adding user: ", error);
+    }
+    handleAddDialogClose();
+  };
+
+  const handleNewUserInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUserData((prevUserData) => ({
+      ...prevUserData,
+      [name]: value,
+    }));
+  };
+
+  const filteredUsers = users.filter((user) =>
+    user.username.toLowerCase().includes(query.toLowerCase())
+  );
+
   return (
     <Card>
-      <CardHeader
-        action={
-          <Button color="inherit" component="a" href="#">
-            View All
-          </Button>
-        }
-        title="Latest Customers"
-      />
+      <CardHeader title="All Users" />
       <Divider />
+      <Stack direction="row" alignItems="center" p={2} spacing={2}>
+        <TextField
+          label="Search"
+          variant="outlined"
+          size="small"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <Button variant="contained" onClick={handleAddDialogOpen}>
+          Add
+        </Button>
+      </Stack>
       <Scrollbar>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 500 }}>
@@ -133,7 +187,7 @@ const OverviewLatestCustomers = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.map((user, index) => (
+              {filteredUsers.map((user, index) => (
                 <TableRow key={user._id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{user.username}</TableCell>
@@ -152,44 +206,32 @@ const OverviewLatestCustomers = (props) => {
           </Table>
         </TableContainer>
       </Scrollbar>
-
-      <Dialog open={!!editUserId} onClose={() => setEditUserId(null)}>
-        <DialogTitle>Edit User</DialogTitle>
+      <Dialog open={addDialogOpen} onClose={handleAddDialogClose}>
+        <DialogTitle>Add New User</DialogTitle>
         <DialogContent>
           <TextField
             label="Username"
             name="username"
-            value={editedUser.username || ""}
-            onChange={handleInputChange}
+            value={newUserData.username}
+            onChange={handleNewUserInputChange}
           />
           <TextField
             label="Email"
             name="email"
-            value={editedUser.email || ""}
-            onChange={handleInputChange}
+            value={newUserData.email}
+            onChange={handleNewUserInputChange}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            name="password"
+            value={newUserData.password}
+            onChange={handleNewUserInputChange}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setEditUserId(null)}>Cancel</Button>
-          <Button onClick={handleSaveEdit}>Save</Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog
-        open={deleteConfirmationOpen}
-        onClose={handleCloseDeleteConfirmation}
-      >
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Are you sure you want to delete this user?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteConfirmation}>Cancel</Button>
-          <Button onClick={handleConfirmDelete} color="error">
-            Delete
-          </Button>
+          <Button onClick={handleAddDialogClose}>Cancel</Button>
+          <Button onClick={handleAddUser}>Add</Button>
         </DialogActions>
       </Dialog>
     </Card>
