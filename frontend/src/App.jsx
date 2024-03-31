@@ -26,8 +26,6 @@
 // export default App;
 
 import "./App.css";
-import Navbar from "./components/Navbar";
-import Login from "./components/login";
 import AllRoutes from "./Routes/AllRoutes";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "./admin/theme";
