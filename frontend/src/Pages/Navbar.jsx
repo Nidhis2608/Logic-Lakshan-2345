@@ -24,7 +24,7 @@ function Navbar() {
             <Link to="/contact" className="nav-link contact">Contact</Link>
           </div>
           <button id="resume-button-1" className="login-signup">
-            <a href="./pages/login.html">Login/Signup</a>
+            <a href="/login">Login/Signup</a>
           </button>
         </div>
       </nav>

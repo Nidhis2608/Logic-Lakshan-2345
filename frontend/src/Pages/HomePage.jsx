@@ -1,6 +1,6 @@
 import '../Styles/HomeStyle.css'
 import { Link } from 'react-router-dom';
-import animation from "../assets/Images/Animation.gif"
+import loginImage from "../assets/Images/login.webp";
 import Navbar from './Navbar';
 import FooterPage from './FooterPage';
 
@@ -18,7 +18,7 @@ function HomePage() {
           <button><Link to="/about" >About</Link></button>
         </div>
         <div className="hero-img">
-          <img src={animation} alt="hero image" />
+          <img src={loginImage} alt="hero image" />
         </div>
       </section>
 
