@@ -1,24 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 :root {
-    --royal-violet: #6A5AE0;
-    --dull-lavender:#9087E5;
-    --pink-salmon: #FF8FA2;
-    --pastel-pink: #FFD6DD;
-    --hawkes-blue: #C4D0FB;
-    --mint-tulip: #C9F2E9;
-    --grey-one:#49465F;
-    --grey-two:#858494;
-    --grey-three:#CCCCCC;
-    --grey-four:#E6E6E6;
-    --grey-five:#EFEEFC;
-    --dark-maroon:#670112;
-    --light-maroon:#b26673;
+  --royal-violet: #6a5ae0;
+  --dull-lavender: #9087e5;
+  --pink-salmon: #ff8fa2;
+  --pastel-pink: #ffd6dd;
+  --hawkes-blue: #c4d0fb;
+  --mint-tulip: #c9f2e9;
+  --grey-one: #49465f;
+  --grey-two: #858494;
+  --grey-three: #cccccc;
+  --grey-four: #e6e6e6;
+  --grey-five: #efeefc;
+  --dark-maroon: #670112;
+  --light-maroon: #b26673;
 }
 
-*{
-    font-family: "Rubik", sans-serif;
-    margin: 0;
-    padding: 0;
+* {
+  font-family: "Rubik", sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
@@ -188,9 +188,15 @@ form.sign-in-form {
   top: -10%;
   right: 48%;
   transform: translateY(-50%);
-  background-image: linear-gradient(-45deg, var(--royal-violet) 0%, var(--royal-violet) 100%);
+  background: rgb(2,0,36);
+  background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(101,101,182,1) 35%, rgba(0,212,255,1) 100%);
+  /* background-image: linear-gradient(
+    -45deg,
+    var(--royal-violet) 180%,
+    var(--royal-violet) 100%
+  ); */
   transition: 1.8s ease-in-out;
-  border-radius: 50%;
+  /* border-radius: 50%; */
   z-index: 6;
 }
 
@@ -418,6 +424,5 @@ form.sign-in-form {
     left: 50%;
   }
 }
-
 
 /* change the width of container */
