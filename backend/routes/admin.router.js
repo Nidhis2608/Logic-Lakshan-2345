@@ -161,6 +161,19 @@ adminRoute.delete('/quizzes/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+adminRoute.get('/quizzes/:id', async (req, res) => {
+  try {
+    const quiz = await QuizModel.findById(req.params.id);
+    
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+    
+    res.status(200).json(quiz);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 
 module.exports = adminRoute
