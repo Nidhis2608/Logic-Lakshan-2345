@@ -46,7 +46,7 @@
 //       if (isCorrect) {
 //         calculatedScore++;
 //       }
-//       return { 
+//       return {
 //         questionNumber: index + 1,
 //         correctAnswer: correctOption,
 //         userAnswer,
@@ -73,9 +73,9 @@
 //             </Typography>
 //           </CardContent>
 //           <FormControl sx={{width:"100%",height:"auto", margin:"auto"}}>
-//             <RadioGroup 
-//               aria-label={`options-${currentQuestionIndex}`} 
-//               value={selectedOptions[currentQuestionIndex] || ""} 
+//             <RadioGroup
+//               aria-label={`options-${currentQuestionIndex}`}
+//               value={selectedOptions[currentQuestionIndex] || ""}
 //               onChange={handleOptionChange}
 //               sx={{ width:"95%", margin:"auto"}}
 //             >
@@ -91,22 +91,22 @@
 //             </RadioGroup>
 //           </FormControl>
 //           <div>
-//             <Button 
-//               disabled={currentQuestionIndex === 0 || submitted} 
+//             <Button
+//               disabled={currentQuestionIndex === 0 || submitted}
 //               onClick={handlePrevious}
 //             >
 //               Previous
 //             </Button>
 //             {currentQuestionIndex === questions.length - 1 && !submitted && (
-//               <Button 
-//                 disabled={!selectedOptions[currentQuestionIndex]} 
+//               <Button
+//                 disabled={!selectedOptions[currentQuestionIndex]}
 //                 onClick={handleSubmit}
 //               >
 //                 Submit
 //               </Button>
 //             )}
-//             <Button 
-//               disabled={currentQuestionIndex === questions.length - 1 || submitted} 
+//             <Button
+//               disabled={currentQuestionIndex === questions.length - 1 || submitted}
 //               onClick={handleNext}
 //             >
 //               Next
@@ -147,37 +147,50 @@
 
 // export default QuizStart;
 
-
-import React, { useState, useEffect } from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { FormControl, FormControlLabel, Radio, RadioGroup, Button } from '@mui/material';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import {
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Button,
+} from "@mui/material";
+import axios from "axios";
 
 const QuizStart = () => {
   const [quiz, setQuiz] = useState(null);
+  const [que, setQues] = useState([]);
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
 
   useEffect(() => {
-    axios.get("https://better-boot-tick.cyclic.app/admin/quizzes/6609954e74458c636cfd0be9") // Replace :id with the actual quiz id
-      .then(res => {
+    axios
+      .get(
+        "https://better-boot-tick.cyclic.app/admin/quizzes/6609954e74458c636cfd0be9"
+      ) // Replace :id with the actual quiz id
+      .then((res) => {
         setQuiz(res.data);
-        console.log(res.data)
+        console.log(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
   }, []);
 
   const fetchQuestion = async (questionId) => {
     try {
-      const response = await axios.get(`https://better-boot-tick.cyclic.app/admin/questions/${questionId}`);
-      console.log(response.data)
+      const response = await axios.get(
+        `https://better-boot-tick.cyclic.app/admin/questions/${questionId}`
+      );
+      console.log(response.data);
+      setQues(response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching question:", error);
@@ -186,13 +199,13 @@ const QuizStart = () => {
   };
 
   const handleNext = () => {
-    setCurrentQuestionIndex(prevIndex => prevIndex + 1);
-    setSelectedOption(''); // Clear selected option for the next question
+    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    setSelectedOption(""); // Clear selected option for the next question
   };
 
   const handlePrevious = () => {
-    setCurrentQuestionIndex(prevIndex => prevIndex - 1);
-    setSelectedOption(''); // Clear selected option for the previous question
+    setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+    setSelectedOption(""); // Clear selected option for the previous question
   };
 
   const handleOptionChange = (event) => {
@@ -214,52 +227,72 @@ const QuizStart = () => {
   const currentQuestion = fetchQuestion(currentQuestionId);
 
   return (
-    <div style={{width:"80%", margin:"auto", backgroundColor:"red", height:"100%"}}>
+    <div
+      style={{
+        width: "80%",
+        margin: "auto",
+        backgroundColor: "red",
+        height: "100%",
+      }}
+    >
       {currentQuestion && (
-        <Card sx={{ width:"95%", margin:"auto",height:"100%"}}>
+        <Card sx={{ width: "95%", margin: "auto", height: "100%" }}>
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {`Question ${currentQuestionIndex + 1}`}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{fontSize: "2rem"}}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontSize: "2rem" }}
+            >
               {currentQuestion.questionText}
             </Typography>
           </CardContent>
-          <FormControl sx={{width:"100%",height:"auto", margin:"auto"}}>
-            <RadioGroup 
-              aria-label={`options-${currentQuestionIndex}`} 
-              value={selectedOption} 
+          <FormControl sx={{ width: "100%", height: "auto", margin: "auto" }}>
+            <RadioGroup
+              aria-label={`options-${currentQuestionIndex}`}
+              value={selectedOption}
               onChange={handleOptionChange}
-              sx={{ width:"95%", margin:"auto"}}
+              sx={{ width: "95%", margin: "auto" }}
             >
-              {currentQuestion.options?.map((option, optionIndex) => (
-                <FormControlLabel
-                  key={optionIndex}
-                  value={option.text}
-                  control={<Radio />}
-                  label={option.text}
-                  sx={{fontSize: "2rem", fontWeight: "bold"}}
-                />
-              ))}
+              {/* <pre>{JSON.stringify({ que }, null, 2)}</pre> */}
+
+              <div>
+                <h2>{que.questionText}</h2>
+                <ul>
+                  {que.options?.map((option, index) => (
+                    <li key={index} style={{ listStyleType: "none" }}>
+                      <input
+                        type="radio"
+                        id={`option_${index}`}
+                        name="quizOption"
+                        value={option.text}
+                      />
+                      <label htmlFor={`option_${index}`}>{option.text}</label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </RadioGroup>
           </FormControl>
           <div>
-            <Button 
-              disabled={currentQuestionIndex === 0 || submitted} 
+            <Button
+              disabled={currentQuestionIndex === 0 || submitted}
               onClick={handlePrevious}
             >
               Previous
             </Button>
-            {currentQuestionIndex === quiz.questions.length - 1 && !submitted && (
-              <Button 
-                disabled={!selectedOption} 
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-            )}
-            <Button 
-              disabled={currentQuestionIndex === quiz.questions.length - 1 || submitted} 
+            {currentQuestionIndex === quiz.questions.length - 1 &&
+              !submitted && (
+                <Button disabled={!selectedOption} onClick={handleSubmit}>
+                  Submit
+                </Button>
+              )}
+            <Button
+              disabled={
+                currentQuestionIndex === quiz.questions.length - 1 || submitted
+              }
               onClick={handleNext}
             >
               Next
