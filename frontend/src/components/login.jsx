@@ -4,6 +4,7 @@ import loginImage from "../assets/Images/login.webp";
 import signupImage from "../assets/Images/login.webp";
 import { useEffect, useRef } from "react";
 import axios from "axios";
+import Navbar from "../Pages/Navbar";
 
 const Login = () => {
   const containerRef = useRef(null);
@@ -150,6 +151,7 @@ const Login = () => {
 
   return (
     <div>
+      <Navbar />
       <div className="container" ref={containerRef}>
         <div className="forms-container">
           <div className="signin-signup">
