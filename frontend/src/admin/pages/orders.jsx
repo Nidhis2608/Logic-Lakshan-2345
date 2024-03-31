@@ -21,6 +21,7 @@ import {
 import { Scrollbar } from "../../admin/components/scrollbar";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { requrl } from "../../admin/const/const";
 
 const QuizzesPage = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -28,6 +29,7 @@ const QuizzesPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTitle, setSearchTitle] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchQuizzes();
@@ -35,13 +37,13 @@ const QuizzesPage = () => {
 
   const fetchQuizzes = async () => {
     try {
-      let url = "https://cyan-clumsy-haddock.cyclic.app/admin/quizzes?";
+      let url = `${requrl}/admin/quizzes?`;
       if (searchTitle) url += `title=${searchTitle}&`;
-      if (filterCategory) url += `category=${filterCategory.toLowerCase()}&`;
-
+      if (filterCategory) url += `category=${filterCategory}&`;
       const response = await fetch(url);
       const data = await response.json();
-      setQuizzes(data);
+      setQuizzes(data.quizzes);
+      setCategories(data.categories); // Set categories from the response
     } catch (error) {
       console.error("Error fetching quizzes: ", error);
     }
@@ -96,13 +98,12 @@ const QuizzesPage = () => {
                 displayEmpty
                 inputProps={{ "aria-label": "Select category" }}
               >
-                <MenuItem value="" disabled>
-                  Filter by Category
-                </MenuItem>
-                <MenuItem value="Java">Java</MenuItem>
-                <MenuItem value="JavaScript">JavaScript</MenuItem>
-                <MenuItem value="Python">Python</MenuItem>
-                <MenuItem value="MongoDB">MongoDB</MenuItem>
+                <MenuItem value="">Filter by Category</MenuItem>
+                {categories.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
               </Select>
             </Stack>
             <div>
