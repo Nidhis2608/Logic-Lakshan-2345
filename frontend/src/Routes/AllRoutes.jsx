@@ -11,6 +11,7 @@ import { Quizzes } from "../admin/layouts/dashboard/Quizzes";
 import { SettingProfile } from "../admin/layouts/dashboard/SettingProfile";
 import { ThemePage } from "../admin/layouts/dashboard/Theme";
 import { AttemptQuiz } from "../admin/layouts/dashboard/AttemptQuiz";
+import { Edit } from "@mui/icons-material";
 
 const Allroutes = () => {
   return (
@@ -26,6 +27,7 @@ const Allroutes = () => {
 
       <Route path="/login" element={<Login />} />
       <Route path="/attemptquiz" element={<AttemptQuiz />} />
+      <Route path="/edit/:id" element={<Edit />} />
     </Routes>
   );
 };

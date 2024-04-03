@@ -7,6 +7,9 @@ import {
   Container,
   Divider,
   IconButton,
+  MenuItem,
+  Modal,
+  Select,
   Stack,
   Table,
   TableBody,
@@ -14,9 +17,8 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
   Typography,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import { Scrollbar } from "../../admin/components/scrollbar";
 import EditIcon from "@mui/icons-material/Edit";
@@ -30,32 +32,29 @@ const QuizzesPage = () => {
   const [searchTitle, setSearchTitle] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [categories, setCategories] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [quizTitle, setQuizTitle] = useState("");
+  const [quizCategory, setQuizCategory] = useState("");
+  const [editingQuiz, setEditingQuiz] = useState(null); // State to hold the quiz being edited
 
   useEffect(() => {
     fetchQuizzes();
-  }, [searchTitle, filterCategory]); // Refetch quizzes when searchTitle or filterCategory changes
+  }, [searchTitle, filterCategory]);
 
   const fetchQuizzes = async () => {
     try {
-      let url = `${requrl}/admin/quizzes?`;
+      let url = `${requrl}admin/quizzes?`;
       if (searchTitle) url += `title=${searchTitle}&`;
       if (filterCategory) url += `category=${filterCategory}&`;
       const response = await fetch(url);
       const data = await response.json();
       setQuizzes(data.quizzes);
-      setCategories(data.categories); // Set categories from the response
+      setCategories(data.categories);
     } catch (error) {
       console.error("Error fetching quizzes: ", error);
     }
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   const handleSearchTitleChange = (event) => {
@@ -64,6 +63,93 @@ const QuizzesPage = () => {
 
   const handleFilterCategoryChange = (event) => {
     setFilterCategory(event.target.value);
+  };
+
+  const handleAddQuestion = (questionId) => {
+    setSelectedQuestions([...selectedQuestions, questionId]);
+  };
+
+  const handleRemoveQuestion = (questionId) => {
+    setSelectedQuestions(selectedQuestions.filter((id) => id !== questionId));
+  };
+
+  const handleOpenModal = () => {
+    fetchQuestions();
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setEditingQuiz(null); // Clear editing state when modal closes
+  };
+
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch(
+        "https://logic-lakshan-2345.onrender.com/admin/questions"
+      );
+      const data = await response.json();
+      setQuestions(data);
+    } catch (error) {
+      console.error("Error fetching questions: ", error);
+    }
+  };
+
+  const handleEditQuiz = (quiz) => {
+    // Set the quiz being edited
+    setEditingQuiz(quiz);
+    // Populate modal fields with quiz data
+    setQuizTitle(quiz.title);
+    setQuizCategory(quiz.category);
+    setSelectedQuestions(quiz.questions);
+    // Open modal
+    setOpenModal(true);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // Create new quiz object
+    const newQuiz = {
+      title: quizTitle,
+      category: quizCategory,
+      createdBy: "66081fe574458c636cfd0b95", // Hardcoded ObjectId
+      questions: selectedQuestions,
+    };
+
+    try {
+      let url = `${requrl}admin/quizzes`;
+      let method = "POST"; // Default to POST for creating new quiz
+
+      // If editingQuiz is not null, then we are editing an existing quiz
+      if (editingQuiz) {
+        url += `/${editingQuiz._id}`;
+        method = "PATCH";
+      }
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newQuiz),
+      });
+
+      if (response.ok) {
+        console.log(`Quiz ${editingQuiz ? "edited" : "created"} successfully!`);
+        // Optionally, you can close the modal here
+        handleCloseModal();
+        // Reset form fields
+        setQuizTitle("");
+        setQuizCategory("");
+        setSelectedQuestions([]);
+        // Refresh quizzes after adding a new one
+        fetchQuizzes();
+      } else {
+        console.error("Failed to create or edit quiz");
+      }
+    } catch (error) {
+      console.error("Error creating or editing quiz: ", error);
+    }
   };
 
   return (
@@ -81,7 +167,12 @@ const QuizzesPage = () => {
               spacing={3}
             >
               <Typography variant="h4">Quizzes</Typography>
-              <Button color="primary" size="large" variant="contained">
+              <Button
+                color="primary"
+                size="large"
+                variant="contained"
+                onClick={handleOpenModal}
+              >
                 Add Quiz
               </Button>
             </Stack>
@@ -130,7 +221,7 @@ const QuizzesPage = () => {
                             <TableCell>{quiz.category}</TableCell>
                             <TableCell>{quiz.questions.length}</TableCell>
                             <TableCell>
-                              <IconButton>
+                              <IconButton onClick={() => handleEditQuiz(quiz)}>
                                 <EditIcon />
                               </IconButton>
                               <IconButton>
@@ -149,14 +240,106 @@ const QuizzesPage = () => {
                   count={quizzes.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  onPageChange={(event, newPage) => setPage(newPage)}
+                  onRowsPerPageChange={(event) =>
+                    setRowsPerPage(parseInt(event.target.value, 10))
+                  }
                 />
               </Card>
             </div>
           </Stack>
         </Container>
       </Box>
+      {/* Modal for adding/editing quiz */}
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            maxWidth: 800,
+            width: "80%",
+            maxHeight: "80%",
+            overflowY: "auto",
+          }}
+        >
+          <Stack spacing={3}>
+            <Typography variant="h5">
+              {editingQuiz ? "Edit Quiz" : "Add Quiz"}
+            </Typography>
+            <Stack direction="row" spacing={2}>
+              {/* Left side - Display questions */}
+              <Stack flexGrow={1}>
+                <Typography variant="h6">Select Questions</Typography>
+                <Scrollbar>
+                  {questions.map((question) => (
+                    <div key={question._id}>
+                      <Typography>{question.questionText}</Typography>
+                      {selectedQuestions.includes(question._id) ? (
+                        <Button
+                          variant="outlined"
+                          onClick={() => handleRemoveQuestion(question._id)}
+                        >
+                          Remove
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outlined"
+                          onClick={() => handleAddQuestion(question._id)}
+                        >
+                          Add
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </Scrollbar>
+              </Stack>
+              {/* Right side - Quiz creation form */}
+              <Stack flexGrow={1}>
+                <Typography variant="h6">Quiz Details</Typography>
+                <form onSubmit={handleSubmit}>
+                  <TextField
+                    label="Title"
+                    variant="outlined"
+                    fullWidth
+                    value={quizTitle}
+                    onChange={(e) => setQuizTitle(e.target.value)}
+                    required
+                  />
+                  <TextField
+                    select
+                    label="Category"
+                    variant="outlined"
+                    fullWidth
+                    value={quizCategory}
+                    onChange={(e) => setQuizCategory(e.target.value)}
+                    required
+                  >
+                    {categories.map((category) => (
+                      <MenuItem key={category} value={category}>
+                        {category}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={!quizTitle || !quizCategory}
+                  >
+                    {editingQuiz ? "Update Quiz" : "Create Quiz"}
+                  </Button>
+                </form>
+              </Stack>
+            </Stack>
+            <Button onClick={handleCloseModal}>Close</Button>
+          </Stack>
+        </Box>
+      </Modal>
     </>
   );
 };
