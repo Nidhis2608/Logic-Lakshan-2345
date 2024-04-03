@@ -69,7 +69,7 @@ function ContactPage() {
             </div>
             <div id="contact-phone">
               <img src={phoneIcon} alt="Phone icon" />
-              <span>+91 1234567890</span>
+              <span>+91 1234589354</span>
             </div>
             <div id="contact-loc">
               <img src={locationIcon} alt="Location icon" />

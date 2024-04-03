@@ -13,12 +13,12 @@ function About() {
 
       <section id="features">
         <div className="about-cont">
-          <h1>Quiz App</h1>
+          <h1>Quiz Me</h1>
           <p>
-            Quezzo is a groundbreaking online quiz learning platform that revolutionizes the way individuals engage with coding and computer science education. 
+            Quiz Me is a groundbreaking online quiz learning platform that revolutionizes the way individuals engage with coding and computer science education. 
             With an extensive library of quizzes spanning various programming languages, algorithms, data structures, and software development topics, Quezzo offers 
             users an unparalleled opportunity to expand their knowledge, sharpen their skills, and stay abreast of industry trends. Through its interactive learning 
-            experience, Quezzo challenges users to apply their knowledge in practical scenarios, providing instant feedback on quiz submissions to reinforce learning 
+            experience, Quiz Me challenges users to apply their knowledge in practical scenarios, providing instant feedback on quiz submissions to reinforce learning 
             and foster deeper understanding.
           </p>
         </div>
