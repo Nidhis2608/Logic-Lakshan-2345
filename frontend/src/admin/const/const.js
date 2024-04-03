@@ -1,3 +1,3 @@
 // const.js
 
-export const requrl = 'https://better-boot-tick.cyclic.app/';
+export const requrl = 'https://logic-lakshan-2345.onrender.com/';

@@ -173,7 +173,7 @@ const QuizStart = () => {
   useEffect(() => {
     axios
       .get(
-        "https://better-boot-tick.cyclic.app/admin/quizzes/6609954e74458c636cfd0be9"
+        "https://logic-lakshan-2345.onrender.com/admin/quizzes/6609954e74458c636cfd0be9"
       ) // Replace :id with the actual quiz id
       .then((res) => {
         setQuiz(res.data);
@@ -187,7 +187,7 @@ const QuizStart = () => {
   const fetchQuestion = async (questionId) => {
     try {
       const response = await axios.get(
-        `https://better-boot-tick.cyclic.app/admin/questions/${questionId}`
+        `https://logic-lakshan-2345.onrender.com/admin/questions/${questionId}`
       );
       console.log(response.data);
       setQues(response.data);
