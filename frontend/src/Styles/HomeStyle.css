@@ -31,9 +31,10 @@ li{
 .header{
     position: fixed;
     width: 100%;
-    background-color:var(--royal-violet);
+    /* background-color:var(--royal-violet); */
     z-index: 10;
     border-top: 1px solid var(--grey-three);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
 }
 
 #nav-menu{
@@ -137,7 +138,8 @@ li{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #6A5AE0;
+    /* background-color: #6A5AE0; */
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
     color: white;
     padding-left: 5%;
     padding-right: 5%;
@@ -201,6 +203,10 @@ li{
 
 
 /* =========================footer start==================================== */
+
+.footer-container{
+    background-image: url("https://cdn3.vectorstock.com/i/1000x1000/03/92/city-town-view-cartoon-vector-31040392.jpg");
+}
 .footer{
     position: relative;
     margin:0px 5%;

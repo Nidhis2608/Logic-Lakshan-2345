@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import '../Styles/HomeStyle.css'
 import facebook from "../assets/Images/facebook.svg"
 import instagram from "../assets/Images/instagram.svg"
@@ -5,11 +6,12 @@ import twitter from "../assets/Images/twitter.svg"
 
 function FooterPage() {
   return (
+    <div className='footer-container'>
     <footer className="footer">
       <div className="touch">
         <h3>Get in Touch</h3>
         <p>Don't miss any updates of our Coding Quiz Challenges!</p>
-        <form action="https://formspree.io/f/mbjnozop" className="f_subscribe_two mailchimp" method="post" noValidate>
+        <form style={{flexDirection:"row", gap:"5px", justifyContent:"start", padding:"0px"}} action="https://formspree.io/f/mbjnozop" className="f_subscribe_two mailchimp" method="post" noValidate>
           <input type="text" name="email" className="form-control memail" placeholder="Email" />
           <button type="submit">Subscribe</button>
         </form>
@@ -57,6 +59,7 @@ function FooterPage() {
         <div className="footer-bg-two"></div>
       </div>
     </footer>
+    </div>
   );
 }
 

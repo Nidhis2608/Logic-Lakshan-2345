@@ -5,7 +5,7 @@ import signupImage from "../assets/Images/login.webp";
 import { useEffect, useRef } from "react";
 import axios from "axios";
 import Navbar from "../Pages/Navbar";
-
+import { requrl } from "../admin/const/const";
 const Login = () => {
   const containerRef = useRef(null);
 
@@ -63,7 +63,7 @@ const Login = () => {
 
       axios
         .post(
-          "https://cyan-clumsy-haddock.cyclic.app/users/login",
+          `${requrl}users/login`,
           formData
         )
         .then((response) => {
@@ -72,7 +72,7 @@ const Login = () => {
             localStorage.setItem("token", data.token);
             showMessage(messageWrapper, "Login Successful", "green");
             setTimeout(() => {
-              window.location.href = "/";
+              window.location.href = "/dashboard";
             }, 1000);
           } else {
             showMessage(
@@ -116,7 +116,7 @@ const Login = () => {
 
       try {
         const response = await axios.post(
-          "https://cyan-clumsy-haddock.cyclic.app/users/register",
+          `${requrl}users/register`,
           requestData
         );
         if (response.status === 200) {
