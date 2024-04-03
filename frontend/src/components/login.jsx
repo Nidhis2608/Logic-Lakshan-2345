@@ -70,6 +70,7 @@ const Login = () => {
           const data = response.data;
           if (data.token) {
             localStorage.setItem("token", data.token);
+            localStorage.setItem("userId", data.user._id);
             showMessage(messageWrapper, "Login Successful", "green");
             setTimeout(() => {
               window.location.href = "/dashboard";

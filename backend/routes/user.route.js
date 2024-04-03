@@ -59,7 +59,7 @@ userRouter.post("/login", async (req, res) => {
     // Generate JWT token
     const token = jwt.sign({ userID: user._id, username: user.username, role: user.role }, "masai");
 
-    res.json({ message: "Login successful", token });
+    res.json({ message: "Login successful", token, user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
