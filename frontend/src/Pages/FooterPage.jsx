@@ -54,9 +54,9 @@ function FooterPage() {
           <a href="#" className="fab fa-pinterest"></a>
         </div>
       </div> */}
-      <div className="footer-bg">
-        <div className="footer-bg-one"></div>
-        <div className="footer-bg-two"></div>
+      <div className="footer-bg"  style={{backgroundImage:`url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Ffree-vector%2Fquiz-background&psig=AOvVaw3iMmuhFpAs5GVwQw_0oDyJ&ust=1712260310521000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOCV2fHopoUDFQAAAAAdAAAAABAR')`}}>
+        {/* <div className="footer-bg-one"></div> */}
+        {/* <div className="footer-bg-two"></div> */}
       </div>
     </footer>
     </div>

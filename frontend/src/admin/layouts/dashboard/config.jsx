@@ -33,17 +33,17 @@ export const items = [
         <CogIcon />
       </SvgIcon>
     ),
-    label: "Settings",
+    label: "Profile",
   },
-  {
-    href: "/theme",
-    icon: (
-      <SvgIcon>
-        <DocumentTextIcon />
-      </SvgIcon>
-    ),
-    label: "Theme",
-  },
+  // {
+  //   href: "/theme",
+  //   icon: (
+  //     <SvgIcon>
+  //       <DocumentTextIcon />
+  //     </SvgIcon>
+  //   ),
+  //   label: "Theme",
+  // },
   {
     href: "/attemptquiz",
     icon: (

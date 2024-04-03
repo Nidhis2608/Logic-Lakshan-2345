@@ -1,4 +1,4 @@
-// import React, { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 // import { Helmet } from "react-helmet-async";
 // import {
 //   Box,
@@ -51,12 +51,24 @@
 //   const fetchUsers = async () => {
 //     try {
 //       const response = await fetch(
-//         `${requrl}/users?username=${searchUsername}`
+//         `${requrl}users?username=${searchUsername}`
 //       );
 //       const data = await response.json();
 //       setUsers(data);
 //     } catch (error) {
 //       console.error("Error fetching users: ", error);
+//     }
+//   };
+
+//   const fetchUserPerformance = async (userId) => {
+//     try {
+//       const response = await fetch(
+//         `${requrl}performance/${userId}`
+//       );
+//       const performanceData = await response.json();
+//       // Do something with the performance data, e.g., display it in a modal
+//     } catch (error) {
+//       console.error("Error fetching user performance: ", error);
 //     }
 //   };
 
@@ -83,7 +95,7 @@
 //         username: newUsername,
 //         email: newEmail,
 //       };
-//       await fetch(`${requrl}/users/${editedUser._id}`, {
+//       await fetch(`${requrl}users/${editedUser._id}`, {
 //         method: "PATCH",
 //         headers: {
 //           "Content-Type": "application/json",
@@ -99,7 +111,7 @@
 
 //   const handleDelete = async (userId) => {
 //     try {
-//       await fetch(`${requrl}/users/${userId}`, {
+//       await fetch(`${requrl}users/${userId}`, {
 //         method: "DELETE",
 //       });
 //       fetchUsers();
@@ -122,7 +134,7 @@
 
 //   const handleAddUser = async () => {
 //     try {
-//       const response = await fetch(`${requrl}/users/register`, {
+//       const response = await fetch(`${requrl}users/register`, {
 //         method: "POST",
 //         headers: {
 //           "Content-Type": "application/json",
@@ -183,6 +195,7 @@
 //                         <TableCell>Username</TableCell>
 //                         <TableCell>Email</TableCell>
 //                         <TableCell>Actions</TableCell>
+//                         <TableCell>Performance</TableCell>
 //                       </TableRow>
 //                     </TableHead>
 //                     <TableBody>
@@ -205,6 +218,15 @@
 //                               >
 //                                 <DeleteIcon />
 //                               </IconButton>
+//                             </TableCell>
+//                             <TableCell>
+//                               <Button
+//                                 variant="outlined"
+//                                 color="primary"
+//                                 onClick={() => fetchUserPerformance(user._id)}
+//                               >
+//                                 View Performance
+//                               </Button>
 //                             </TableCell>
 //                           </TableRow>
 //                         ))}
@@ -345,17 +367,13 @@ const UsersPage = () => {
     }
   };
 
-  const fetchUserPerformance = async (userId) => {
-    try {
-      const response = await fetch(
-        `https://logic-lakshan-2345.onrender.com/performance/${userId}`
-      );
-      const performanceData = await response.json();
-      // Do something with the performance data, e.g., display it in a modal
-    } catch (error) {
-      console.error("Error fetching user performance: ", error);
-    }
-  };
+  // const fetchUserPerformance = async (userId) => {
+  //   try {
+  //     window.open(`${requrl}performance/${userId}`, "_blank");
+  //   } catch (error) {
+  //     console.error("Error fetching user performance: ", error);
+  //   }
+  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -480,7 +498,7 @@ const UsersPage = () => {
                         <TableCell>Username</TableCell>
                         <TableCell>Email</TableCell>
                         <TableCell>Actions</TableCell>
-                        <TableCell>Performance</TableCell>
+                        {/* <TableCell>Performance</TableCell> */}
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -505,13 +523,13 @@ const UsersPage = () => {
                               </IconButton>
                             </TableCell>
                             <TableCell>
-                              <Button
+                              {/* <Button
                                 variant="outlined"
                                 color="primary"
                                 onClick={() => fetchUserPerformance(user._id)}
                               >
                                 View Performance
-                              </Button>
+                              </Button> */}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -586,4 +604,3 @@ const UsersPage = () => {
 };
 
 export default UsersPage;
-
