@@ -1,14 +1,14 @@
 import { Box, Container, Link, Typography } from "@mui/material";
 
 const items = [
-  {
-    label: "About Us",
-    href: "https://devias.io/about-us",
-  },
-  {
-    label: "Terms",
-    href: "https://devias.io/legal/tos",
-  },
+  // {
+  //   label: "About Us",
+  //   href: "https://devias.io/about-us",
+  // },
+  // {
+  //   label: "Terms",
+  //   href: "https://devias.io/legal/tos",
+  // },
 ];
 
 export const Footer = () => (

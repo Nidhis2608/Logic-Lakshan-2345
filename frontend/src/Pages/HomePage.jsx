@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Snackbar, Alert } from "@mui/material";
 import { useNotification } from "../components/NotificationContext"; // Adjust the import path as needed
 import loginImage from "../assets/Images/login.webp";
@@ -8,7 +8,15 @@ import FooterPage from "./FooterPage";
 import "../Styles/HomeStyle.css";
 
 function HomePage() {
+  const navigate = useNavigate();
   const { notification, hideNotification } = useNotification();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   return (
     <div>

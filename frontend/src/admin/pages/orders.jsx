@@ -24,6 +24,7 @@ import { Scrollbar } from "../../admin/components/scrollbar";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { requrl } from "../../admin/const/const";
+import { useNavigate } from "react-router-dom";
 
 const QuizzesPage = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -47,6 +48,17 @@ const QuizzesPage = () => {
   const [selectedQuestionsPage, setSelectedQuestionsPage] = useState(0);
   const [selectedQuestionsRowsPerPage, setSelectedQuestionsRowsPerPage] =
     useState(3);
+
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+    // Check if token is present in localStorage
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirect to the homepage if token is not present
+      navigate("/");
+    }
+  }, [navigate]);
 
   const userRole = localStorage.getItem("role");
 

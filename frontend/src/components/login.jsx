@@ -70,6 +70,7 @@ const Login = () => {
             localStorage.setItem("userId", data.user._id);
             localStorage.setItem("role", data.user.role);
             localStorage.setItem("username", data.user.username);
+            localStorage.setItem("email", data.user.email);
 
             showMessage(messageWrapper, "Login Successful", "green");
             setTimeout(() => {
@@ -168,8 +169,8 @@ const Login = () => {
               </div>
               <div id="messageWrapper"> </div>
               <input type="submit" defaultValue="Login" className="btn solid" />
-              <p className="social-text">Or Sign in with social platforms</p>
-              <div className="social-media">
+              {/* <p className="social-text">Or Sign in with social platforms</p> */}
+              {/* <div className="social-media">
                 <a href="#" className="social-icon">
                   <i className="fab fa-facebook-f" />
                 </a>
@@ -182,7 +183,7 @@ const Login = () => {
                 <a href="#" className="social-icon">
                   <i className="fab fa-linkedin-in" />
                 </a>
-              </div>
+              </div> */}
             </form>
             <form action="#" className="sign-up-form" id="signUpForm">
               <h2 className="title">Sign up</h2>
@@ -204,8 +205,8 @@ const Login = () => {
                   </div> */}
               <input type="submit" className="btn" defaultValue="Sign up" />
               <div id="signUpMessageWrapper" className="message-wrapper" />
-              <p className="social-text">Or Sign up with social platforms</p>
-              <div className="social-media">
+              {/* <p className="social-text">Or Sign up with social platforms</p> */}
+              {/* <div className="social-media">
                 <a href="#" className="social-icon">
                   <i className="fab fa-facebook-f" />
                 </a>
@@ -218,7 +219,7 @@ const Login = () => {
                 <a href="#" className="social-icon">
                   <i className="fab fa-linkedin-in" />
                 </a>
-              </div>
+              </div> */}
             </form>
           </div>
         </div>
