@@ -33,7 +33,8 @@ li{
 .header{
     position: fixed;
     width: 100%;
-    background-color:var(--royal-violet);
+    /* background-color:var(--royal-violet); */
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
     z-index: 10;
 }
 
@@ -139,7 +140,8 @@ li{
 .about-hero{
     height: 50vh;
     padding-top: 100px;
-    background-color: var(--royal-violet);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
+    /* background-color: var(--royal-violet); */
     /* background-image: url("../assets/images/about.jpg"); */
     background-position: center;
     background-size: cover;
@@ -177,7 +179,8 @@ li{
 }
 
 .features-cont>.card{
-    background-color: var(--royal-violet);
+    /* background-color: var(--royal-violet); */
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
     display: flex;
     flex-direction: column;
     gap: 20px;
