@@ -7,11 +7,9 @@ This project is a comprehensive quiz application designed to provide users with 
 Fullstack
 
 ### Deployed App
-Frontend: 
+Frontend: https://quizme-jade.vercel.app/
 
-Backend: 
-
-Database: 
+Backend: https://logic-lakshan-2345.onrender.com/
 
 ### Directory Structure
 logic-lakshan-2345 ├─ backend/ ├─ frontend/
