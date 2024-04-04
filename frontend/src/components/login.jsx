@@ -6,8 +6,10 @@ import { useEffect, useRef } from "react";
 import axios from "axios";
 import Navbar from "../Pages/Navbar";
 import { requrl } from "../admin/const/const";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const containerRef = useRef(null);
+  const navigate=useNavigate();
 
   useEffect(() => {
     const signInBtn = document.querySelector("#sign-in-btn");
@@ -74,7 +76,8 @@ const Login = () => {
 
             showMessage(messageWrapper, "Login Successful", "green");
             setTimeout(() => {
-              window.location.href = "/dashboard";
+              // window.location.href = "/dashboard";
+              navigate("/dashboard")
             }, 1000);
           } else {
             showMessage(
