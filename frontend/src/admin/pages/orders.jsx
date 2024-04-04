@@ -5,17 +5,16 @@ import {
   Button,
   Card,
   Container,
-  Divider,
   IconButton,
   MenuItem,
   Modal,
   Select,
+  Snackbar,
   Stack,
   Table,
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
   TextField,
   Typography,
@@ -27,21 +26,31 @@ import { requrl } from "../../admin/const/const";
 
 const QuizzesPage = () => {
   const [quizzes, setQuizzes] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTitle, setSearchTitle] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [questions, setQuestions] = useState([]);
-  const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [filterQuestionCategory, setFilterQuestionCategory] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [quizTitle, setQuizTitle] = useState("");
   const [quizCategory, setQuizCategory] = useState("");
-  const [editingQuiz, setEditingQuiz] = useState(null); // State to hold the quiz being edited
+  const [editingQuiz, setEditingQuiz] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [availableQuestionsPage, setAvailableQuestionsPage] = useState(0);
+  const [availableQuestionsRowsPerPage, setAvailableQuestionsRowsPerPage] =
+    useState(3);
+  const [selectedQuestionsPage, setSelectedQuestionsPage] = useState(0);
+  const [selectedQuestionsRowsPerPage, setSelectedQuestionsRowsPerPage] =
+    useState(3);
 
   useEffect(() => {
     fetchQuizzes();
-  }, [searchTitle, filterCategory]);
+    fetchFilteredQuestions(filterQuestionCategory);
+  }, [searchTitle, filterCategory, filterQuestionCategory]);
 
   const fetchQuizzes = async () => {
     try {
@@ -57,6 +66,19 @@ const QuizzesPage = () => {
     }
   };
 
+  const fetchFilteredQuestions = async (category) => {
+    try {
+      const url =
+        `https://logic-lakshan-2345.onrender.com/admin/questions` +
+        (category ? `?category=${category}` : "");
+      const response = await fetch(url);
+      const data = await response.json();
+      setQuestions(data);
+    } catch (error) {
+      console.error("Error fetching questions: ", error);
+    }
+  };
+
   const handleSearchTitleChange = (event) => {
     setSearchTitle(event.target.value);
   };
@@ -66,90 +88,96 @@ const QuizzesPage = () => {
   };
 
   const handleAddQuestion = (questionId) => {
-    setSelectedQuestions([...selectedQuestions, questionId]);
-  };
-
-  const handleRemoveQuestion = (questionId) => {
-    setSelectedQuestions(selectedQuestions.filter((id) => id !== questionId));
-  };
-
-  const handleOpenModal = () => {
-    fetchQuestions();
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setEditingQuiz(null); // Clear editing state when modal closes
-  };
-
-  const fetchQuestions = async () => {
-    try {
-      const response = await fetch(
-        "https://logic-lakshan-2345.onrender.com/admin/questions"
-      );
-      const data = await response.json();
-      setQuestions(data);
-    } catch (error) {
-      console.error("Error fetching questions: ", error);
+    const questionToAdd = questions.find((q) => q._id === questionId);
+    if (questionToAdd) {
+      setSelectedQuestions([...selectedQuestions, questionToAdd]);
     }
   };
 
+  const handleRemoveQuestion = (questionId) => {
+    setSelectedQuestions(selectedQuestions.filter((q) => q._id !== questionId));
+  };
+
   const handleEditQuiz = (quiz) => {
-    // Set the quiz being edited
     setEditingQuiz(quiz);
-    // Populate modal fields with quiz data
     setQuizTitle(quiz.title);
     setQuizCategory(quiz.category);
-    setSelectedQuestions(quiz.questions);
-    // Open modal
+    const selectedQuestionDetails = quiz.questions
+      .map((id) => questions.find((q) => q._id === id))
+      .filter((q) => q);
+    setSelectedQuestions(selectedQuestionDetails);
     setOpenModal(true);
+  };
+
+  const handleDeleteQuiz = async (quizId) => {
+    try {
+      const response = await fetch(`${requrl}admin/quizzes/${quizId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setSnackbarMessage(`Quiz deleted successfully!`);
+        setSnackbarOpen(true);
+        fetchQuizzes(); // Refresh the quiz list
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to delete quiz", errorData.message);
+      }
+    } catch (error) {
+      console.error("Error deleting quiz: ", error);
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Create new quiz object
-    const newQuiz = {
+
+    const createdBy = "66081fe574458c636cfd0b96";
+    const quizData = {
       title: quizTitle,
       category: quizCategory,
-      createdBy: "66081fe574458c636cfd0b95", // Hardcoded ObjectId
-      questions: selectedQuestions,
+      createdBy,
+      questions: selectedQuestions.map((q) => q._id),
     };
 
+    let url = `${requrl}admin/quizzes`;
+    let method = "POST";
+
+    if (editingQuiz) {
+      url += `/${editingQuiz._id}`;
+      method = "PATCH";
+    }
+
     try {
-      let url = `${requrl}admin/quizzes`;
-      let method = "POST"; // Default to POST for creating new quiz
-
-      // If editingQuiz is not null, then we are editing an existing quiz
-      if (editingQuiz) {
-        url += `/${editingQuiz._id}`;
-        method = "PATCH";
-      }
-
       const response = await fetch(url, {
         method: method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newQuiz),
+        body: JSON.stringify(quizData),
       });
 
       if (response.ok) {
-        console.log(`Quiz ${editingQuiz ? "edited" : "created"} successfully!`);
-        // Optionally, you can close the modal here
+        const action = editingQuiz ? "updated" : "created";
+        setSnackbarMessage(`Quiz ${action} successfully!`);
+        setSnackbarOpen(true);
         handleCloseModal();
-        // Reset form fields
-        setQuizTitle("");
-        setQuizCategory("");
-        setSelectedQuestions([]);
-        // Refresh quizzes after adding a new one
         fetchQuizzes();
       } else {
-        console.error("Failed to create or edit quiz");
+        const errorData = await response.json();
+        console.error("Failed to process quiz", errorData.message);
       }
     } catch (error) {
-      console.error("Error creating or editing quiz: ", error);
+      console.error("Error processing quiz: ", error);
     }
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setEditingQuiz(null);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -171,13 +199,13 @@ const QuizzesPage = () => {
                 color="primary"
                 size="large"
                 variant="contained"
-                onClick={handleOpenModal}
+                onClick={() => setOpenModal(true)}
               >
                 Add Quiz
               </Button>
             </Stack>
             <Stack direction="row" spacing={2}>
-              <input
+              <TextField
                 type="text"
                 placeholder="Search by Title"
                 value={searchTitle}
@@ -197,60 +225,49 @@ const QuizzesPage = () => {
                 ))}
               </Select>
             </Stack>
-            <div>
-              <Card>
-                <Scrollbar>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Title</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Number of Questions</TableCell>
-                        <TableCell>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {quizzes
-                        .slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                        .map((quiz) => (
-                          <TableRow key={quiz._id}>
-                            <TableCell>{quiz.title}</TableCell>
-                            <TableCell>{quiz.category}</TableCell>
-                            <TableCell>{quiz.questions.length}</TableCell>
-                            <TableCell>
-                              <IconButton onClick={() => handleEditQuiz(quiz)}>
-                                <EditIcon />
-                              </IconButton>
-                              <IconButton>
-                                <DeleteIcon />
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                </Scrollbar>
-                <Divider />
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  component="div"
-                  count={quizzes.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={(event, newPage) => setPage(newPage)}
-                  onRowsPerPageChange={(event) =>
-                    setRowsPerPage(parseInt(event.target.value, 10))
-                  }
-                />
-              </Card>
-            </div>
+            <Card>
+              <Scrollbar>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Title</TableCell>
+                      <TableCell>Category</TableCell>
+                      <TableCell>Number of Questions</TableCell>
+                      <TableCell>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {quizzes
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((quiz) => (
+                        <TableRow key={quiz._id}>
+                          <TableCell>{quiz.title}</TableCell>
+                          <TableCell>{quiz.category}</TableCell>
+                          <TableCell>{quiz.questions.length}</TableCell>
+                          <TableCell>
+                            <IconButton onClick={() => handleEditQuiz(quiz)}>
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => handleDeleteQuiz(quiz._id)}
+                            >
+                              {" "}
+                              {/* Call handleDeleteQuiz */}
+                              <DeleteIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </Scrollbar>
+            </Card>
           </Stack>
         </Container>
       </Box>
-      {/* Modal for adding/editing quiz */}
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{
@@ -261,85 +278,186 @@ const QuizzesPage = () => {
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
-            maxWidth: 800,
+            maxWidth: 1000,
             width: "80%",
-            maxHeight: "80%",
-            overflowY: "auto",
+            borderRadius: 8,
           }}
         >
           <Stack spacing={3}>
             <Typography variant="h5">
               {editingQuiz ? "Edit Quiz" : "Add Quiz"}
             </Typography>
-            <Stack direction="row" spacing={2}>
-              {/* Left side - Display questions */}
-              <Stack flexGrow={1}>
-                <Typography variant="h6">Select Questions</Typography>
-                <Scrollbar>
-                  {questions.map((question) => (
-                    <div key={question._id}>
-                      <Typography>{question.questionText}</Typography>
-                      {selectedQuestions.includes(question._id) ? (
-                        <Button
-                          variant="outlined"
-                          onClick={() => handleRemoveQuestion(question._id)}
-                        >
-                          Remove
-                        </Button>
-                      ) : (
+            <Box sx={{ display: "flex" }}>
+              <Stack sx={{ flexGrow: 1, mr: 2 }}>
+                <Typography variant="h6">Available Questions</Typography>
+                <Select
+                  value={filterQuestionCategory}
+                  onChange={(e) => setFilterQuestionCategory(e.target.value)}
+                  displayEmpty
+                  fullWidth
+                  size="small"
+                >
+                  <MenuItem value="">All Categories</MenuItem>
+                  {categories.map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <Scrollbar style={{ maxHeight: 300 }}>
+                  {questions
+                    .slice(
+                      availableQuestionsPage * availableQuestionsRowsPerPage,
+                      availableQuestionsPage * availableQuestionsRowsPerPage +
+                        availableQuestionsRowsPerPage
+                    )
+                    .map((question) => (
+                      <div key={question._id}>
+                        <Typography>{question.questionText}</Typography>
                         <Button
                           variant="outlined"
                           onClick={() => handleAddQuestion(question._id)}
                         >
                           Add
                         </Button>
-                      )}
-                    </div>
-                  ))}
-                </Scrollbar>
-              </Stack>
-              {/* Right side - Quiz creation form */}
-              <Stack flexGrow={1}>
-                <Typography variant="h6">Quiz Details</Typography>
-                <form onSubmit={handleSubmit}>
-                  <TextField
-                    label="Title"
-                    variant="outlined"
-                    fullWidth
-                    value={quizTitle}
-                    onChange={(e) => setQuizTitle(e.target.value)}
-                    required
-                  />
-                  <TextField
-                    select
-                    label="Category"
-                    variant="outlined"
-                    fullWidth
-                    value={quizCategory}
-                    onChange={(e) => setQuizCategory(e.target.value)}
-                    required
-                  >
-                    {categories.map((category) => (
-                      <MenuItem key={category} value={category}>
-                        {category}
-                      </MenuItem>
+                      </div>
                     ))}
-                  </TextField>
+                </Scrollbar>
+                <Stack direction="row" justifyContent="center">
                   <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={!quizTitle || !quizCategory}
+                    onClick={() =>
+                      setAvailableQuestionsPage((prevPage) =>
+                        Math.max(prevPage - 1, 0)
+                      )
+                    }
+                    disabled={availableQuestionsPage === 0}
                   >
-                    {editingQuiz ? "Update Quiz" : "Create Quiz"}
+                    Previous
                   </Button>
-                </form>
+                  <Button
+                    onClick={() =>
+                      setAvailableQuestionsPage((prevPage) =>
+                        Math.min(
+                          prevPage + 1,
+                          Math.ceil(
+                            questions.length / availableQuestionsRowsPerPage
+                          ) - 1
+                        )
+                      )
+                    }
+                    disabled={
+                      availableQuestionsPage >=
+                      Math.ceil(
+                        questions.length / availableQuestionsRowsPerPage
+                      ) -
+                        1
+                    }
+                  >
+                    Next
+                  </Button>
+                </Stack>
               </Stack>
-            </Stack>
-            <Button onClick={handleCloseModal}>Close</Button>
+              <Stack sx={{ flexGrow: 1 }}>
+                <Typography variant="h6">Selected Questions</Typography>
+                <Scrollbar style={{ maxHeight: 300 }}>
+                  {selectedQuestions
+                    .slice(
+                      selectedQuestionsPage * selectedQuestionsRowsPerPage,
+                      selectedQuestionsPage * selectedQuestionsRowsPerPage +
+                        selectedQuestionsRowsPerPage
+                    )
+                    .map((question) => (
+                      <div key={question._id}>
+                        <Typography>{question.questionText}</Typography>
+                        <Button
+                          variant="outlined"
+                          onClick={() => handleRemoveQuestion(question._id)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                </Scrollbar>
+                <Stack direction="row" justifyContent="center">
+                  <Button
+                    onClick={() =>
+                      setSelectedQuestionsPage((prevPage) =>
+                        Math.max(prevPage - 1, 0)
+                      )
+                    }
+                    disabled={selectedQuestionsPage === 0}
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      setSelectedQuestionsPage((prevPage) =>
+                        Math.min(
+                          prevPage + 1,
+                          Math.ceil(
+                            selectedQuestions.length /
+                              selectedQuestionsRowsPerPage
+                          ) - 1
+                        )
+                      )
+                    }
+                    disabled={
+                      selectedQuestionsPage >=
+                      Math.ceil(
+                        selectedQuestions.length / selectedQuestionsRowsPerPage
+                      ) -
+                        1
+                    }
+                  >
+                    Next
+                  </Button>
+                </Stack>
+              </Stack>
+            </Box>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                label="Title"
+                variant="outlined"
+                fullWidth
+                value={quizTitle}
+                onChange={(e) => setQuizTitle(e.target.value)}
+                required
+              />
+              <TextField
+                select
+                label="Category"
+                variant="outlined"
+                fullWidth
+                value={quizCategory}
+                onChange={(e) => setQuizCategory(e.target.value)}
+                required
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2 }}
+              >
+                {editingQuiz ? "Update Quiz" : "Create Quiz"}
+              </Button>
+            </form>
           </Stack>
         </Box>
       </Modal>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ "& .MuiSnackbarContent-root": { backgroundColor: "green" } }}
+      />
     </>
   );
 };
