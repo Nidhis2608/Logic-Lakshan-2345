@@ -37,14 +37,6 @@ export const TopNav = () => (
         </Box>
       </Stack>
       <Stack alignItems="center" direction="row" spacing={2}>
-        <Link
-          color="inherit"
-          href="https://mui.com/store/items/carpatin-dashboard"
-          target="_blank"
-          variant="body2"
-        >
-          See Pro Version
-        </Link>
         <Avatar
           src="/assets/avatars/avatar-chen-simmons.jpg"
           variant="rounded"
