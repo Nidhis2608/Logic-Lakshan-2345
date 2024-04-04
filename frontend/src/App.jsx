@@ -1,32 +1,7 @@
-// import "./App.css";
-// import Navbar from "./components/Navbar";
-// import Login from "./components/login";
-// import AllRoutes from "./Routes/AllRoutes";
-
-// import { CssBaseline, ThemeProvider } from "@mui/material";
-// import { createTheme } from "./admin/theme";
-
-// function App() {
-//   const theme = createTheme({
-//     colorPreset: "green",
-//     contrast: "high",
-//   });
-//   return (
-//     <>
-//       <ThemeProvider theme={theme}>
-//         <CssBaseline />
-//         <AllRoutes />
-//         <Navbar />
-//         <Login />
-//       </ThemeProvider>
-//     </>
-//   );
-// }
-
-// export default App;
-
+import React from "react";
 import "./App.css";
 import AllRoutes from "./Routes/AllRoutes";
+import { AuthProvider } from "./AuthContext/AuthContext"; // Import the AuthProvider
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "./admin/theme";
 
@@ -35,6 +10,7 @@ function App() {
     colorPreset: "green",
     contrast: "high",
   });
+
   return (
     <>
       <ThemeProvider theme={theme}>

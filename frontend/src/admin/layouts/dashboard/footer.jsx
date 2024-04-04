@@ -1,14 +1,14 @@
-import { Box, Container, Link, Typography } from '@mui/material';
+import { Box, Container, Link, Typography } from "@mui/material";
 
 const items = [
   {
-    label: 'About Us',
-    href: 'https://devias.io/about-us'
+    label: "About Us",
+    href: "https://devias.io/about-us",
   },
   {
-    label: 'Terms',
-    href: 'https://devias.io/legal/tos'
-  }
+    label: "Terms",
+    href: "https://devias.io/legal/tos",
+  },
 ];
 
 export const Footer = () => (
@@ -16,31 +16,28 @@ export const Footer = () => (
     <Container
       maxWidth="xl"
       sx={{
-        display: 'flex',
+        display: "flex",
         flexDirection: {
-          xs: 'column',
-          sm: 'row'
+          xs: "column",
+          sm: "row",
         },
         py: 3,
-        '& a': {
+        "& a": {
           mt: {
             xs: 1,
-            sm: 0
+            sm: 0,
           },
-          '&:not(:last-child)': {
+          "&:not(:last-child)": {
             mr: {
               xs: 0,
-              sm: 5
-            }
-          }
-        }
+              sm: 5,
+            },
+          },
+        },
       }}
     >
-      <Typography
-        color="text.secondary"
-        variant="caption"
-      >
-        © 2023 Devias
+      <Typography color="text.secondary" variant="caption">
+        © 2023 QuizMe
       </Typography>
       <Box sx={{ flexGrow: 1 }} />
       {items.map((link) => (

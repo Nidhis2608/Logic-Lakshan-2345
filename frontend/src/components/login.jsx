@@ -62,10 +62,7 @@ const Login = () => {
       };
 
       axios
-        .post(
-          `${requrl}users/login`,
-          formData
-        )
+        .post(`${requrl}users/login`, formData)
         .then((response) => {
           const data = response.data;
           if (data.token) {
@@ -100,7 +97,7 @@ const Login = () => {
       const email = signUpForm.elements.email.value;
       const password = signUpForm.elements.password.value;
 
-      if (!username || !email || !password ) {
+      if (!username || !email || !password) {
         showMessage(
           signUpMessageWrapper,
           "Please fill in all required fields.",

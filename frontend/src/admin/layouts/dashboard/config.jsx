@@ -1,4 +1,6 @@
 import ChartPieIcon from "@heroicons/react/24/solid/ChartPieIcon";
+import QuestionMarkCircleIcon from "@heroicons/react/24/solid/QuestionMarkCircleIcon";
+
 import CogIcon from "@heroicons/react/24/solid/CogIcon";
 import DocumentTextIcon from "@heroicons/react/24/solid/DocumentTextIcon";
 import ExclamationTriangleIcon from "@heroicons/react/24/solid/ExclamationTriangleIcon";
@@ -8,22 +10,22 @@ import { SvgIcon } from "@mui/material";
 
 export const items = [
   {
-    href: "/quizzes",
+    href: "/dashboard",
     icon: (
       <SvgIcon>
-        <ShoppingCartIcon />
+        <QuestionMarkCircleIcon />
       </SvgIcon>
     ),
     label: "Quizzes",
   },
   {
-    href: "/dashboard",
+    href: "/users",
     icon: (
       <SvgIcon>
         <ChartPieIcon />
       </SvgIcon>
     ),
-    label: "Stats",
+    label: "Users",
   },
 
   {
