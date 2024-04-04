@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 // import FooterPage from "./FooterPage";
 // import Navbar from "./Navbar";
 // import "../Styles/Contact.css"
@@ -37,7 +38,7 @@
 
 // export default ContactPage;
 
-import React from 'react';
+// import React from 'react';
 import "../Styles/Contact.css"
 import emailIcon from '../assets/Images/email.svg';
 import phoneIcon from '../assets/Images/phone.svg';
