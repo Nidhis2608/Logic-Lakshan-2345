@@ -8,7 +8,9 @@ Fullstack
 
 ### Deployed App
 Frontend: 
+
 Backend: 
+
 Database: 
 
 ### Directory Structure
@@ -58,6 +60,6 @@ npm start
 ## Password:- admin123
 
 ### Team Members
-- **Team Lead:** [Nidhi] ([Nidhis2608])
-- **Team Member:** [Kundan Kumar Suraj] ([kundan761])
-- **Team Member:** [Mohd Asif ] ([heyasif])
+- [Nidhi] ([Nidhis2608])
+- [Kundan Kumar Suraj] ([kundan761])
+- [Mohd Asif ] ([heyasif])
