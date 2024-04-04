@@ -257,3 +257,4 @@ const Login = () => {
 };
 
 export default Login;
+//correct signup message color
