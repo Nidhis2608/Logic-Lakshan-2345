@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import '../Styles/About.css';
 import Navbar from './Navbar';
 import FooterPage from './FooterPage';

@@ -1,4 +1,44 @@
-import React from 'react';
+/* eslint-disable react/no-unescaped-entities */
+// import FooterPage from "./FooterPage";
+// import Navbar from "./Navbar";
+// import "../Styles/Contact.css"
+
+
+// function ContactPage() {
+//   return (
+//     <div>
+//       <Navbar />
+   
+//       <section id="contact">
+//         <h1>Contact <span className="boldtext red">Us</span></h1>
+//         <div className="contact-cont">
+//           <form action="https://formspree.io/f/mbjnozop" method="POST">
+//             <div className="contact-form">
+//               <input type="text" placeholder="Your Name" name="name" />
+//               <input type="email" placeholder="Email" name="email" />
+//               <textarea placeholder="Message" rows="5" name="message"></textarea>
+//               <button type="submit">Submit</button>
+//             </div>
+//           </form>
+//           <div className="contact-info">
+//             <h2>Let's Connect</h2>
+//             <p>Got questions or feedback? We're all ears! Reach out to us because your thoughts matter. Together, let's make this quiz experience even better.</p>
+//             <div id="contact-email"><img src="../assets/images/email.svg" alt="email icon" /><p>admin@gmail.com</p></div>
+//             <div id="contact-phone"><img src="../assets/images/phone.svg" alt="phone icon" /><span>+91 1234567890</span></div>
+//             <div id="contact-loc"><img src="../assets/images/location.svg" alt="location icon" /><span>India</span></div>
+//           </div>
+//         </div>
+//       </section>
+//         <FooterPage />
+//       <script src="../script/contact.js"></script>
+//       <script src="https://kit.fontawesome.com/4c69a665fd.js" crossOrigin="anonymous"></script>
+//     </div>
+//   );
+// }
+
+// export default ContactPage;
+
+// import React from 'react';
 import "../Styles/Contact.css"
 import emailIcon from '../assets/Images/email.svg';
 import phoneIcon from '../assets/Images/phone.svg';
