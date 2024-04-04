@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Snackbar, Alert } from "@mui/material";
 import { useNotification } from "../components/NotificationContext"; // Adjust the import path as needed
-//import loginImage from "../assets/Images/login.webp";
+import loginImage from "../assets/Images/login.webp";
 import Navbar from "./Navbar";
 import FooterPage from "./FooterPage";
 import "../Styles/HomeStyle.css";
@@ -38,7 +38,7 @@ function HomePage() {
           </button>
         </div>
         <div className="hero-img">
-          {/* //<img src={loginImage} alt="hero image" /> */}
+          <img src={loginImage} alt="hero image" />
         </div>
       </section>
 

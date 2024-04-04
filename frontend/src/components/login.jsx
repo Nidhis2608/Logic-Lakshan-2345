@@ -1,7 +1,7 @@
 // import React from "react";
 import "../Styles/login.css";
-// import loginImage from "../assets/Images/login.webp";
-// import signupImage from "../assets/Images/login.webp";
+import loginImage from "../assets/Images/login.webp";
+import signupImage from "../assets/Images/login.webp";
 import { useEffect, useRef } from "react";
 import axios from "axios";
 import Navbar from "../Pages/Navbar";
@@ -235,7 +235,7 @@ const Login = () => {
                 Sign up
               </button>
             </div>
-            {/* <img src={loginImage} className="image" alt="" /> */}
+            <img src={loginImage} className="image" alt="" />
           </div>
           <div className="panel right-panel">
             <div className="content">
@@ -248,7 +248,7 @@ const Login = () => {
                 Sign in
               </button>
             </div>
-            {/* <img src={signupImage} className="image" alt="" /> */}
+            <img src={signupImage} className="image" alt="" />
           </div>
         </div>
       </div>

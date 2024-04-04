@@ -24,7 +24,9 @@ function Navbar() {
             <Link to="/contact" className="nav-link contact">Contact</Link>
           </div>
           <button id="resume-button-1" className="login-signup">
-            <a href="/login">Login/Signup</a>
+            {/* <a href="/login">Login/Signup</a> */}
+            <Link to="/login" >Login/Signup</Link>
+
           </button>
         </div>
       </nav>
