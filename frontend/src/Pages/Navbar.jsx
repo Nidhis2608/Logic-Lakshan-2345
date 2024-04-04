@@ -7,7 +7,7 @@ function Navbar() {
     <header className="header">
       <nav id="nav-menu">
         <div className="logo-cont">
-          <img id="logo-img" src={QuizLogo} alt="logo" /> 
+          <img id="logo-img" src={QuizLogo} alt="logo" style={{borderRadius: "100%"}}/> 
           <h1>Quiz Me</h1>
         </div>
         <div className="logo-menu">

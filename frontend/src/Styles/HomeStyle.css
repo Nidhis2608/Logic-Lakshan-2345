@@ -235,11 +235,13 @@ li{
     padding: 10px;
     /* border: none; */
     border-radius: 6px;
+    
 }
 
 .touch>form>button{
     padding: 10px;
-    background: var(--royal-violet);
+    /* background: var(--royal-violet); */
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(0,212,255,1) 100%);
     border: none;
     border-radius: 6px;
     color: white;
