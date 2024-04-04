@@ -1,183 +1,172 @@
 import React, { useState, useEffect } from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { Button, FormControl, Radio, RadioGroup } from "@mui/material";
+import { useParams } from "react-router-dom";
 import axios from "axios";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  FormControl,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 import { requrl } from "../const/const";
 
-
-const QuizStart = ({ quizId }) => {
+const QuizStart = () => {
+  const { id: quizId } = useParams();
   const [quiz, setQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOptions, setSelectedOptions] = useState(new Array(10).fill(""));
+  const [selectedOptions, setSelectedOptions] = useState(
+    new Array(10).fill("")
+  );
   const [submitted, setSubmitted] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [totalScore, setTotalScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
-  const [userId, setUserId] = useState("");
-
-  useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    setUserId(userId);
-  }, []);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
         const response = await axios.get(`${requrl}admin/quizzes/${quizId}`);
         setQuiz(response.data);
-        setQuestions(response.data.questions);
         await fetchQuestionsData(response.data.questions);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching quiz data:", error);
+        setLoading(false);
       }
     };
     fetchQuizData();
   }, [quizId]);
 
-  const fetchQuestionsData = async (questions) => {
-    const promises = questions.map((question) => axios.get(`${requrl}admin/questions/${question}`));
+  const fetchQuestionsData = async (questionIds) => {
+    const promises = questionIds.map((questionId) =>
+      axios.get(`${requrl}admin/questions/${questionId}`)
+    );
     try {
       const responses = await Promise.all(promises);
-      const updatedQuestions = responses.map((response) => response.data);
-      setQuestions(updatedQuestions);
+      setQuestions(responses.map((response) => response.data));
     } catch (error) {
-      console.error("Error fetching question data:", error);
+      console.error("Error fetching questions data:", error);
     }
   };
 
+  const handleOptionChange = (event) => {
+    const newSelectedOptions = [...selectedOptions];
+    newSelectedOptions[currentQuestionIndex] = event.target.value;
+    setSelectedOptions(newSelectedOptions);
+  };
+
   const handleNext = () => {
-    if (currentQuestionIndex < quiz.questions.length - 1) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
 
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
 
-  const handleOptionChange = (event) => {
-    const updatedOptions = [...selectedOptions];
-    updatedOptions[currentQuestionIndex] = event.target.value;
-    setSelectedOptions(updatedOptions);
-  };
-
-  const handleSubmit = async () => {
-    let calculatedScore = 0;
+  const handleSubmit = () => {
     const userAnswersList = questions.map((question, index) => {
-      if (question.options) {
-        const correctOption = question.options.find((option) => option.isCorrect)?.text;
-        const userAnswer = selectedOptions[index] || "Not answered";
-        const isCorrect = userAnswer === correctOption;
-        if (isCorrect) {
-          calculatedScore++;
-        }
-        return {
-          questionText: question.questionText,
-          correctAnswer: correctOption,
-          userAnswer,
-          isCorrect,
-        };
-      } else {
-        return {
-          questionText: question.questionText,
-          correctAnswer: "Not available",
-          userAnswer: "Not answered",
-          isCorrect: false,
-        };
+      const userAnswer = selectedOptions[index] || "Not answered";
+      const correctOption = question.options.find(
+        (option) => option.isCorrect
+      )?.text;
+      const isCorrect = userAnswer === correctOption;
+      if (isCorrect) {
+        setTotalScore((prevScore) => prevScore + 1);
       }
+      return {
+        questionText: question.questionText,
+        userAnswer,
+        correctAnswer: correctOption,
+        isCorrect,
+      };
     });
-    setTotalScore(calculatedScore);
-    setSubmitted(true);
     setUserAnswers(userAnswersList);
-
-    try {
-      await axios.post(`${requrl}performance/submit`, {
-        userId,
-        quizId,
-        score: calculatedScore,
-        timeTaken: 0,
-      });
-    } catch (error) {
-      console.error("Error submitting performance data:", error);
-    }
+    setSubmitted(true);
   };
 
-  if (!quiz || questions.length === 0) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
   if (submitted) {
     return (
-      <div style={{ width: "80%", margin: "auto", backgroundColor: "" }}>
-        <div style={{ border: "1px solid black", padding: "20px", borderRadius: "10px" }}>
-          <Typography variant="h6">Your score: {totalScore} / {quiz.questions.length}</Typography>
-          {userAnswers.map((answer, index) => (
-            <div key={index}>
-              <Typography variant="body1">
-                {`Question ${index + 1}: Your Answer - ${answer.userAnswer}, Correct Answer - ${answer.correctAnswer}`}
-              </Typography>
-            </div>
-          ))}
-        </div>
+      <div style={{ width: "80%", margin: "auto" }}>
+        <Typography variant="h6">
+          Your score: {totalScore} / {questions.length}
+        </Typography>
+        {userAnswers.map((answer, index) => (
+          <div key={index}>
+            <Typography variant="body1">
+              {`Question ${index + 1}: ${answer.questionText}`}
+              <br />
+              {`Your Answer: ${answer.userAnswer}, Correct Answer: ${answer.correctAnswer}`}
+            </Typography>
+          </div>
+        ))}
       </div>
     );
   }
 
   const currentQuestion = questions[currentQuestionIndex];
-  const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
-  const isNextDisabled = !selectedOptions[currentQuestionIndex] || submitted || isLastQuestion;
-  const isPreviousDisabled = currentQuestionIndex === 0 || submitted || isLastQuestion;
-  const isSubmitDisabled = submitted || !isLastQuestion || !selectedOptions[currentQuestionIndex];
+  const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
   return (
-    <div style={{ width: "80%", margin: "auto", backgroundColor: "", height: "60%" }}>
-      <Card sx={{ width: "95%", margin: "auto", height: "100%" }}>
+    <div style={{ width: "80%", margin: "auto" }}>
+      <Card>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {`Question ${currentQuestionIndex + 1}: ${currentQuestion.questionText}`}
+            {`Question ${currentQuestionIndex + 1}: ${
+              currentQuestion.questionText
+            }`}
           </Typography>
+          <FormControl>
+            <RadioGroup
+              aria-label="quiz-options"
+              name={`options_${currentQuestionIndex}`}
+              value={selectedOptions[currentQuestionIndex]}
+              onChange={handleOptionChange}
+            >
+              {currentQuestion.options.map((option, index) => (
+                <label key={index}>
+                  <Radio value={option.text} />
+                  {option.text}
+                </label>
+              ))}
+            </RadioGroup>
+          </FormControl>
         </CardContent>
-        <FormControl sx={{ width: "100%", height: "auto", margin: "auto" }}>
-          <RadioGroup
-            aria-label={`options-${currentQuestionIndex}`}
-            value={selectedOptions[currentQuestionIndex]}
-            onChange={handleOptionChange}
-            sx={{ width: "95%", margin: "auto" }}
-          >
-            <div>
-              <ul>
-                {currentQuestion.options &&
-                  currentQuestion.options.map((option, index) => (
-                    <li key={index} style={{ listStyleType: "none" }}>
-                      <Radio
-                        id={`option_${index}`}
-                        value={option.text}
-                        checked={selectedOptions[currentQuestionIndex] === option.text}
-                        onChange={handleOptionChange}
-                      />
-                      <label htmlFor={`option_${index}`}>{option.text}</label>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          </RadioGroup>
-        </FormControl>
-        <div>
-          <Button disabled={isPreviousDisabled} onClick={handlePrevious}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "16px",
+          }}
+        >
+          <Button disabled={currentQuestionIndex <= 0} onClick={handlePrevious}>
             Previous
           </Button>
-          {isLastQuestion && (
-            <Button disabled={isSubmitDisabled} onClick={handleSubmit}>
+          {isLastQuestion ? (
+            <Button
+              disabled={!selectedOptions[currentQuestionIndex]}
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
+          ) : (
+            <Button
+              disabled={!selectedOptions[currentQuestionIndex]}
+              onClick={handleNext}
+            >
+              Next
+            </Button>
           )}
-          <Button disabled={isNextDisabled} onClick={handleNext}>
-            Next
-          </Button>
         </div>
       </Card>
     </div>

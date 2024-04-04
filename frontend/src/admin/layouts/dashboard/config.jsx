@@ -1,11 +1,6 @@
 import ChartPieIcon from "@heroicons/react/24/solid/ChartPieIcon";
 import QuestionMarkCircleIcon from "@heroicons/react/24/solid/QuestionMarkCircleIcon";
-
 import CogIcon from "@heroicons/react/24/solid/CogIcon";
-import DocumentTextIcon from "@heroicons/react/24/solid/DocumentTextIcon";
-import ExclamationTriangleIcon from "@heroicons/react/24/solid/ExclamationTriangleIcon";
-import ShoppingCartIcon from "@heroicons/react/24/solid/ShoppingCartIcon";
-import StarIcon from "@heroicons/react/24/solid/StarIcon";
 import { SvgIcon } from "@mui/material";
 
 export const items = [
@@ -19,16 +14,6 @@ export const items = [
     label: "Quizzes",
   },
   {
-    href: "/users",
-    icon: (
-      <SvgIcon>
-        <ChartPieIcon />
-      </SvgIcon>
-    ),
-    label: "Users",
-  },
-
-  {
     href: "/settings",
     icon: (
       <SvgIcon>
@@ -37,31 +22,19 @@ export const items = [
     ),
     label: "Profile",
   },
-  // {
-  //   href: "/theme",
-  //   icon: (
-  //     <SvgIcon>
-  //       <DocumentTextIcon />
-  //     </SvgIcon>
-  //   ),
-  //   label: "Theme",
-  // },
-  {
-    href: "/attemptquiz",
+];
+
+const role = localStorage.getItem("role");
+
+if (role === "admin") {
+  // Add user management item for admin
+  items.splice(1, 0, {
+    href: "/users",
     icon: (
       <SvgIcon>
-        <StarIcon />
+        <ChartPieIcon />
       </SvgIcon>
     ),
-    label: "Quiz Attempt",
-  },
-  // {
-  //   href: "/404",
-  //   icon: (
-  //     <SvgIcon>
-  //       <ExclamationTriangleIcon />
-  //     </SvgIcon>
-  //   ),
-  //   label: "Error",
-  // },
-];
+    label: "Users",
+  });
+}

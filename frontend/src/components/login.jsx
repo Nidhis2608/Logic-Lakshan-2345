@@ -68,7 +68,9 @@ const Login = () => {
           if (data.token) {
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.user._id);
-            localStorage.setItem('role', data.user.role)
+            localStorage.setItem("role", data.user.role);
+            localStorage.setItem("username", data.user.username);
+
             showMessage(messageWrapper, "Login Successful", "green");
             setTimeout(() => {
               window.location.href = "/dashboard";

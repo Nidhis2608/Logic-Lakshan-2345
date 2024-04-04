@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import logo from "../../assets/Images/QuizLogo.png";
 import {
   Box,
   Button,
@@ -46,6 +47,8 @@ const QuizzesPage = () => {
   const [selectedQuestionsPage, setSelectedQuestionsPage] = useState(0);
   const [selectedQuestionsRowsPerPage, setSelectedQuestionsRowsPerPage] =
     useState(3);
+
+  const userRole = localStorage.getItem("role");
 
   useEffect(() => {
     fetchQuizzes();
@@ -114,7 +117,6 @@ const QuizzesPage = () => {
       const response = await fetch(`${requrl}admin/quizzes/${quizId}`, {
         method: "DELETE",
       });
-
       if (response.ok) {
         setSnackbarMessage(`Quiz deleted successfully!`);
         setSnackbarOpen(true);
@@ -130,7 +132,6 @@ const QuizzesPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const createdBy = "66081fe574458c636cfd0b96";
     const quizData = {
       title: quizTitle,
@@ -195,14 +196,17 @@ const QuizzesPage = () => {
               spacing={3}
             >
               <Typography variant="h4">Quizzes</Typography>
-              <Button
-                color="primary"
-                size="large"
-                variant="contained"
-                onClick={() => setOpenModal(true)}
-              >
-                Add Quiz
-              </Button>
+
+              {userRole === "admin" && (
+                <Button
+                  color="primary"
+                  size="large"
+                  variant="contained"
+                  onClick={() => setOpenModal(true)}
+                >
+                  Add Quiz
+                </Button>
+              )}
             </Stack>
             <Stack direction="row" spacing={2}>
               <TextField
@@ -248,16 +252,30 @@ const QuizzesPage = () => {
                           <TableCell>{quiz.category}</TableCell>
                           <TableCell>{quiz.questions.length}</TableCell>
                           <TableCell>
-                            <IconButton onClick={() => handleEditQuiz(quiz)}>
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              onClick={() => handleDeleteQuiz(quiz._id)}
-                            >
-                              {" "}
-                              {/* Call handleDeleteQuiz */}
-                              <DeleteIcon />
-                            </IconButton>
+                            {userRole === "admin" && (
+                              <>
+                                <IconButton
+                                  onClick={() => handleEditQuiz(quiz)}
+                                >
+                                  <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                  onClick={() => handleDeleteQuiz(quiz._id)}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </>
+                            )}
+                            {userRole === "user" && (
+                              <Button
+                                color="primary"
+                                onClick={() =>
+                                  (window.location.href = `/attemptquiz/${quiz._id}`)
+                                }
+                              >
+                                Attempt
+                              </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}
