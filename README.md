@@ -66,9 +66,9 @@ npm start
 ## Password:- admin123
 
 ### Team Members
-- [Nidhi] ([Nidhis2608])
-- [Kundan Kumar Suraj] ([kundan761])
-- [Mohd Asif ] ([heyasif])
+- Nidhi <a href="https://github.com/Nidhis2608" alt="...">Github Profile</a>
+- Kundan Kumar Suraj <a href="https://github.com/kundan761" alt="...">Github Profile</a>
+- Mohd Asif <a href="https://github.com/heyasif" alt="...">Github Profile</a>
 
 
 - Home Page
