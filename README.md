@@ -15,14 +15,19 @@ Backend: https://logic-lakshan-2345.onrender.com/
 logic-lakshan-2345 ├─ backend/ ├─ frontend/
 
 ### Features
-## List out the key features of your application.
 
 User authentication (signup, login, logout)
+
 Quiz creation, management, and taking
+
 Result tracking and analysis
+
 Multi-level sorting of users
+
 CRUD operations for questions 
+
 Multi-level user access control
+
 Implemented role-based access control to differentiate between user roles.
 
 ### Technology Stack
