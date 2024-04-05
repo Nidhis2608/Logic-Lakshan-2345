@@ -91,7 +91,7 @@ const Login = () => {
           console.error("Error:", error);
           showMessage(
             messageWrapper,
-            "An error occurred. Please try again later.",
+            "Invalid credentials",
             "red"
           );
         });
@@ -124,7 +124,7 @@ const Login = () => {
           `${requrl}users/register`,
           requestData
         );
-        if (response.status === 200) {
+        if (response.status === 201) {
           const data = response.data;
           showMessage(signUpMessageWrapper, data.message, "green");
         } else {

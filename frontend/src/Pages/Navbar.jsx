@@ -8,7 +8,7 @@ function Navbar() {
       <nav id="nav-menu">
         <div className="logo-cont">
           <img id="logo-img" src={QuizLogo} alt="logo" style={{borderRadius: "100%"}}/> 
-          <h1>Quiz Me</h1>
+          {/* <h1>Quiz Me</h1> */}
         </div>
         <div className="logo-menu">
           <img className="menu-icon" src="./assets/images/menu.svg" alt="menu icon" />
