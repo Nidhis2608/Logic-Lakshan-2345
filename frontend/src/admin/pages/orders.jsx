@@ -282,7 +282,8 @@ const QuizzesPage = () => {
                               <Button
                                 color="primary"
                                 onClick={() =>
-                                  (window.location.href = `/attemptquiz/${quiz._id}`)
+                                  // (window.location.href = `/attemptquiz/${quiz._id}`)
+                                  navigate(`/attemptquiz/${quiz._id}`)
                                 }
                               >
                                 Attempt
