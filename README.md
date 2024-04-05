@@ -44,6 +44,25 @@ bcrypt: Library for hashing passwords.
 
 jwt: Library for generating JSON Web Tokens.
 
+## User Routes
+- `POST /register`: Register a new user
+- `POST /login`: Log in an existing user
+- `GET /`: Get all users
+- `DELETE /:id`: Delete a user by ID
+- `PATCH /:id`: Update a user by ID
+
+## Admin Routes
+- `POST /admin/questions`: Create a new question
+- `GET /admin/questions`: Get all questions (with optional category filter)
+- `GET /admin/questions/:id`: Get a specific question by ID
+- `POST /admin/quizzes/:quizId/questions`: Add questions to a quiz
+- `POST /admin/quizzes`: Create a new quiz
+- `GET /admin/quizzes`: Get all quizzes (with optional category and title filter)
+- `PATCH /admin/quizzes/:id`: Update a quiz by ID
+- `DELETE /admin/quizzes/:id`: Delete a quiz by ID
+- `GET /admin/quizzes/:id`: Get a specific quiz by ID
+
+
 ## Installation & Getting started
 Detailed instructions on how to install, configure, and get the project running.
 
