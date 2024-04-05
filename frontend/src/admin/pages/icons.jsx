@@ -64,7 +64,7 @@ const Page = () => (
                     {' '}
                     <Link
                       color="primary"
-                      href="https://heroicons.com"
+                      to="https://heroicons.com"
                       target="_blank"
                       variant="inherit"
                     >
