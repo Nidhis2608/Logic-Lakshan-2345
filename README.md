@@ -14,6 +14,9 @@ Backend: https://logic-lakshan-2345.onrender.com/
 ### Directory Structure
 logic-lakshan-2345 ├─ backend/ ├─ frontend/
 
+### Video Walkthrough of the project
+https://drive.google.com/file/d/1Z9j_ybn6fuU40asOGoF7BCqlozjTTEHi/view?usp=drive_link
+
 ### Features
 
 User authentication (signup, login, logout)
@@ -66,3 +69,17 @@ npm start
 - [Nidhi] ([Nidhis2608])
 - [Kundan Kumar Suraj] ([kundan761])
 - [Mohd Asif ] ([heyasif])
+
+
+- Home Page
+![image](https://github.com/Nidhis2608/Logic-Lakshan-2345/assets/147683595/5f2c5272-d4f5-46eb-a6fe-922190205366)
+
+- Login/Signup
+![image](https://github.com/Nidhis2608/Logic-Lakshan-2345/assets/147683595/0fd34b57-2703-48ec-89e0-026c04027dbe)
+
+- User Dashboard
+![image](https://github.com/Nidhis2608/Logic-Lakshan-2345/assets/147683595/9dbdc4be-a64f-4bec-8957-b9dfee9385b5)
+
+- Admin Dashboard
+![image](https://github.com/Nidhis2608/Logic-Lakshan-2345/assets/147683595/9179886b-a020-45d7-a7ab-783792def280)
+
